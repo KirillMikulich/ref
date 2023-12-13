@@ -1,0 +1,123 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "root": true,
+  "extends": [
+    "plugin:react/recommended",
+    "standard-with-typescript",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "overrides": [],
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 90,
+        "tabWidth": 2,
+        "ignoreComments": true,
+        "ignoreUrls": true
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["../*"]
+      }
+    ],
+    "@typescript-eslint/promise-function-async": "warn",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "warn",
+    "react/no-array-index-key": "warn",
+    "@typescript-eslint/no-empty-interface": "off",
+    "react/jsx-filename-extension": "off",
+    "react/function-component-definition": "off",
+    "default-param-last": "off",
+    "import/no-named-as-default": "off",
+    "no-plusplus": "off",
+    "@typescript-eslint/strict-boolean-expressions": "warn",
+    // "no-shadow": "off",
+    // "@typescript-eslint/no-shadow": "error",
+    // "no-unused-vars": "off",
+    // "@typescript-eslint/no-unused-vars": "error",
+    // "no-unused-expressions": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal"],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "*redux*",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "*@mui/*",
+            "group": "external",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    // "@typescript-eslint/indent": ["error", 2], prettier conflict
+    "@typescript-eslint/ban-types": [
+      "warn",
+      {
+        "types": {
+          // add a custom message to help explain why not to use it
+          "Foo": "Don't use Foo because it is unsafe",
+          // add a custom message, AND tell the plugin how to fix it
+          "{}": {
+            "message": "Use object instead",
+            "fixWith": "object"
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {},
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  },
+  "globals": {
+    "JSX": true
+  }
+}
