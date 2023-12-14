@@ -1,5 +1,4 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
-
 import {
   fontFamily,
   xsBreakpoint,
@@ -11,6 +10,23 @@ import {
   defaultBackgroundColor,
 } from "styles/constants";
 import { createFontFamily } from "utils";
+import { Secondary, Primary, Text } from './buttons';
+
+const MuiButton = {
+  variants: [
+    Primary,
+    Secondary,
+    Text,
+  ]
+};
+
+declare module "@mui/material/Button" {
+  interface ButtonPropsVariantOverrides {
+    Primary: true;
+    Secondary: true;
+    Text: true;
+  }
+};
 
 const theme = createTheme(
   {
@@ -49,7 +65,9 @@ const theme = createTheme(
     },
   },
   {
-    components: {},
+    components: {
+      MuiButton: {...MuiButton},
+    },
   }
 );
 
