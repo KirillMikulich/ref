@@ -28,6 +28,10 @@ export const LIGHT_BLUE_50 = "#F3F8FE";
 export const RED_500 = "#FF383B";
 export const RED_100 = "#FFE4E2";
 
+//Table
+export const TABLE_BLUE_50 = "#F1F3F9";
+export const TABLE_BLUE_100 = "#E1E6EF";
+
 export const fontFamily = "Inter";
 export const defaultTextColor = GREY_900;
 export const defaultBackgroundColor = GREY_50_BG;

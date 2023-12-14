@@ -13,5 +13,6 @@ export const createFontFamily = (fontFamily: string): any => {
     button: { fontFamily },
     caption: { fontFamily },
     overline: { fontFamily },
+    fontFamily: fontFamily
   };
 };

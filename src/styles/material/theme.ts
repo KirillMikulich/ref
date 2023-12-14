@@ -41,7 +41,7 @@ const theme = createTheme(
       },
     },
     typography: {
-      fontFamily: createFontFamily(`${fontFamily}`),
+      ...createFontFamily(`${fontFamily}`),
       fontSize: 12,
     },
     components: {
@@ -50,6 +50,7 @@ const theme = createTheme(
         html {
           background: ${defaultBackgroundColor};
           color: ${defaultTextColor};
+          font-family: ${fontFamily};
         }
 
         body {
