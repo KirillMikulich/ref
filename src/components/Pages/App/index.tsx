@@ -1,12 +1,7 @@
-import React, { type FC } from 'react';
-
+import React, { type FC } from "react";
 
 const App: FC = () => {
-  return (
-    <>
-      
-    </>
-  );
-}
+  return <></>;
+};
 
 export default App;
