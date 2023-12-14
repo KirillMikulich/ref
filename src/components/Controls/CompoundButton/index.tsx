@@ -25,7 +25,7 @@ const StyledButton = styled(Button)({
   "&:hover": {
     backgroundColor: TABLE_BLUE_50,
   },
-  "&:focuse": {
+  "&:focus": {
     border: `3px solid ${BLUE_400}`,
     backgroundColor: TABLE_BLUE_50,
   },

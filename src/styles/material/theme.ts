@@ -45,6 +45,11 @@ const theme = createTheme(
       fontSize: 12,
     },
     components: {
+      MuiButtonBase: {
+        defaultProps: {
+          disableRipple: true,
+        },
+      },
       MuiCssBaseline: {
         styleOverrides: `
         html {
