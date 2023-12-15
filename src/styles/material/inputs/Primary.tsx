@@ -26,6 +26,9 @@ export const Primary = styled(TextField)({
       color: GREY_500,
       textWrap: 'nowrap',
       lineHeight: "normal",
+    },
+    '&.Mui-disabled': {
+      color: GREY_500,
     }
   },
   '.MuiInputBase-root': {
@@ -49,6 +52,10 @@ export const Primary = styled(TextField)({
     '&.Mui-error': {
       backgroundColor: RED_100,
     },
+    '&.Mui-disabled': {
+      WebkitTextFillColor: "none",
+      backgroundColor: "transparent",
+    }
   },
   '.MuiInputBase-input': {
     color: GREY_900,
