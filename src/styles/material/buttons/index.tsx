@@ -1,8 +1,8 @@
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
-    Primary: true;
-    Secondary: true;
-    Text: true;
+    primary: true;
+    secondary: true;
+    text: true;
   }
 };
 

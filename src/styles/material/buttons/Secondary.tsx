@@ -3,7 +3,7 @@ import { defaultStyles } from "./default";
 
 export const Secondary: any = 
 {
-  props: { variant: "Secondary" },
+  props: { variant: "secondary" },
   style: {
     ...defaultStyles,
     color: BLUE_400,

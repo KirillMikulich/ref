@@ -1,18 +1,18 @@
 import { Meta, StoryObj } from "@storybook/react";
-import TextField from "components/Controls/TextField";
+import TextField, { TextFieldProps } from "components/Controls/TextField";
 import React from "react";
 
-const meta: Meta<typeof TextField> = {
+const meta: Meta<TextFieldProps> = {
   title: 'Inputs',
   component: TextField,
-  argTypes: { 
-    /* variant: {
+  argTypes: {
+    variant: {
       type: 'string',
       description: 'Input Style',
-      defaultValue: 'Primary',
-      options: ['Primary', 'Secondary'],
+      defaultValue: 'primary',
+      options: ['primary', 'secondary'],
       control: { type: 'select' }
-    }, */
+    },
     label: {
       type: 'string',
       description: 'Label for input',
@@ -57,19 +57,52 @@ const meta: Meta<typeof TextField> = {
 
 export default meta;
 
-type Story = StoryObj<typeof TextField>;
+type Story = StoryObj<TextFieldProps>;
 
 export const Standart: Story = {
   args: {
+    variant: 'primary',
     label: 'Lorem ipsum',
     value: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
   },
-  render: (args) => <TextField {...args}/>
+  render: (args) => <TextField {...args} sx={{maxWidth: '200px'}}/>
 }
 
 export const LongTitle: Story = {
   args: {
+    variant: 'primary',
     label: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
   },
-  render: (args) => <TextField {...args}/>
+  render: (args) => <TextField {...args} sx={{maxWidth: '200px'}}/>
+}
+
+export const Error: Story = {
+  args: {
+    variant: 'primary',
+    label: 'Lorem ipsum',
+    error: true,
+    errorMessage: 'Test error text',
+    value: 'Lorem ipsum dolor sit amet consectetur adipisicing elit'
+  },
+  render: (args) => <TextField {...args} sx={{maxWidth: '200px'}}/>
+}
+
+export const HelperText: Story = {
+  args: {
+    variant: 'primary',
+    label: 'Lorem ipsum',
+    helperMessage: 'Lorem ipsum dolor sit',
+    value: 'Lorem ipsum dolor sit amet consectetur adipisicing elit'
+  },
+  render: (args) => <TextField {...args} sx={{maxWidth: '200px'}}/>
+}
+
+export const DisabledReadOnly: Story = {
+  args: {
+    variant: 'primary',
+    label: 'Lorem ipsum',
+    disabled: true,
+    value: 'Lorem ipsum dolor sit amet consectetur adipisicing elit'
+  },
+  render: (args) => <TextField {...args} sx={{maxWidth: '200px'}}/>
 }

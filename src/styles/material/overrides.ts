@@ -1,17 +1,9 @@
-import { Primary as BtnPrimary, Secondary as BtnSecondary, Text as BtnText } from "./buttons";
-import { Primary as TfPrimary, Secondary as TfSecondary } from './inputs';
+import { Primary, Secondary, Text} from "./buttons";
 
 export const MuiButton = {
   variants: [
-    BtnPrimary,
-    BtnSecondary,
-    BtnText,
+    Primary,
+    Secondary,
+    Text,
   ]
 };
-
-export const MuiTextField = {
-  variants: [
-    TfPrimary,
-    TfSecondary
-  ]
-}

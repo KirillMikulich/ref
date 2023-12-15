@@ -3,7 +3,7 @@ import { defaultStyles } from "./default";
 
 export const Primary: any = 
 {
-  props: { variant: "Primary" },
+  props: { variant: "primary" },
   style: {
     ...defaultStyles,
     color: "white",

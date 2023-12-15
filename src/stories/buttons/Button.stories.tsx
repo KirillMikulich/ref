@@ -19,8 +19,8 @@ const meta: Meta<typeof StyledButton> = {
     variant: {
       type: 'string',
       description: 'Типы кнопок',
-      defaultValue: 'Primary',
-      options: ['Primary', 'Secondary', 'Text'],
+      defaultValue: 'primary',
+      options: ['primary', 'secondary', 'text'],
       control: { type: 'select' },
     },
     disabled: {
@@ -52,7 +52,7 @@ type Story = StoryObj<typeof StyledButton>;
 
 export const Standart: Story = {
   args: {
-    variant: 'Primary',
+    variant: 'primary',
     label: 'Default'
   },
   render: (args) => {
