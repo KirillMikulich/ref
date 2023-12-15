@@ -1,10 +1,10 @@
-import StyledButton, {StyledButtonProps} from "./Buttons.component";
+import StyledButton from "./Buttons.component";
 import React from "react";
-import { Meta, Story} from "@storybook/react";
+import { Meta, StoryObj} from "@storybook/react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 
-export default { 
+const meta: Meta<typeof StyledButton> = {
   title: 'Buttons',
   component: StyledButton,
   argTypes: { 
@@ -44,25 +44,28 @@ export default {
       if: { arg: 'startIcon', truthy: false },
     }
   },
-} as Meta<StyledButtonProps>;
+};
 
-const Template: Story<StyledButtonProps> = (args) => {
-  const {startIcon, endIcon, ...rest} = args;
+export default meta;
 
-  if (startIcon) {
-    return <StyledButton {...rest} startIcon={<DeleteIcon />}/>
+type Story = StoryObj<typeof StyledButton>;
+
+export const Standart: Story = {
+  args: {
+    variant: 'Primary',
+    label: 'Default'
+  },
+  render: (args) => {
+    const {startIcon, endIcon, ...rest} = args;
+  
+    if (startIcon) {
+      return <StyledButton {...rest} startIcon={<DeleteIcon />}/>
+    }
+  
+    if (endIcon) {
+      return <StyledButton {...rest} endIcon={<SendIcon />}/>
+    }
+  
+    return <StyledButton {...rest} />
   }
-
-  if (endIcon) {
-    return <StyledButton {...rest} endIcon={<SendIcon />}/>
-  }
-
-  return <StyledButton {...rest} />
-}
-
-export const Standart: Story<StyledButtonProps>  = Template.bind({});
-
-Standart.args = {
-  variant: 'Primary',
-  label: 'Default'
-}
+};
