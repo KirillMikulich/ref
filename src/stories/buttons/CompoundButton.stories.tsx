@@ -1,8 +1,8 @@
 import React from "react";
-import { Meta, Story} from "@storybook/react";
-import CompoundButton, { Props } from "components/Controls/CompoundButton";
+import { Meta, StoryObj} from "@storybook/react";
+import CompoundButton from "components/Controls/CompoundButton";
 
-export default { 
+const meta: Meta<typeof CompoundButton> = {
   title: 'Buttons',
   component: CompoundButton,
   argTypes: { 
@@ -29,13 +29,15 @@ export default {
       control: { type: 'boolean' }
     },
   },
-} as Meta<Props>;
+}
 
-const Template: Story<Props> = (args) => <CompoundButton {...args} />;
+export default meta;
+type Story = StoryObj<typeof CompoundButton>;
 
-export const Compound: Story<Props>  = Template.bind({});
-
-Compound.args = {
-  label: 'Открытый',
-  text: 'Описать что значит открытый тип QR кода, для чего используется.'
+export const Compound: Story = {
+  args: {
+    label: 'Открытый',
+    text: 'Описать что значит открытый тип QR кода, для чего используется.'
+  },
+  render: (args) => <CompoundButton {...args} />
 }
