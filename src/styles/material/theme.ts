@@ -10,23 +10,7 @@ import {
   defaultBackgroundColor,
 } from "styles/constants";
 import { createFontFamily } from "utils";
-import { Secondary, Primary, Text } from './buttons';
-
-const MuiButton = {
-  variants: [
-    Primary,
-    Secondary,
-    Text,
-  ]
-};
-
-declare module "@mui/material/Button" {
-  interface ButtonPropsVariantOverrides {
-    Primary: true;
-    Secondary: true;
-    Text: true;
-  }
-};
+import { MuiButton } from "./overrides";
 
 const theme = createTheme(
   {
