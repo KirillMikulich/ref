@@ -11,7 +11,7 @@ export const Primary: any =
     "&:hover": {
       backgroundColor: BLUE_300
     },
-    "&:focus": {
+    "&:focus-visible": {
       backgroundColor: BLUE_300
     },
     "&:disabled": {

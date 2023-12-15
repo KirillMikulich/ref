@@ -11,7 +11,7 @@ export const Text: any =
     "&:hover": {
       backgroundColor: LIGHT_BLUE_50
     },
-    "&:focus": {    
+    "&:focus-visible": {    
       border: `2px solid ${BLUE_50}`,
       backgroundColor: LIGHT_BLUE_50,
     },

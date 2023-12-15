@@ -12,7 +12,7 @@ export const Secondary: any =
     "&:hover": {
       backgroundColor: BLUE_50
     },
-    "&:focus": {
+    "&:focus-visible": {
       border: `2px solid ${BLUE_50}`,
       backgroundColor: BLUE_50,
     },
