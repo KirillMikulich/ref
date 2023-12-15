@@ -20,8 +20,8 @@ const TextField: FC<TextFieldProps> = (args) => {
   const Field = variant === 'primary' ? Primary : Secondary;
 
   return <Container>
-    {error && <InputError message={errorMessage} />}
-    <Field helperText={helperMessage} error={error} variant={'outlined'} {...rest}/>
+    {error && errorMessage && <InputError message={errorMessage} />}
+    <Field helperText={helperMessage} error={error} variant={'filled'} {...rest}/>
   </Container>;
 }
 
