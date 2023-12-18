@@ -3,7 +3,7 @@ import TextField, { TextFieldProps } from 'components/Controls/TextField';
 import React from 'react';
 
 const meta: Meta<TextFieldProps> = {
-	title: 'Inputs',
+	title: 'Input',
 	component: TextField,
 	argTypes: {
 		variant: {
