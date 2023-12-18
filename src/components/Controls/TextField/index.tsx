@@ -1,28 +1,39 @@
-import React, { type FC } from "react"
-import { Box, TextFieldProps as MuiTextFieldProps, styled } from "@mui/material";
-import InputError from "../InputError";
-import { Primary, Secondary } from "styles/material/inputs";
+import React, { type FC } from 'react';
+import {
+	Box,
+	TextFieldProps as MuiTextFieldProps,
+	styled,
+} from '@mui/material';
+import InputError from '../InputError';
+import { Primary, Secondary } from 'styles/material/inputs';
 
 export type TextFieldProps = {
-  errorMessage?: string,
-  helperMessage?: string,
-  variant?: 'primary' | 'secondary'
+	errorMessage?: string;
+	helperMessage?: string;
+	variant?: 'primary' | 'secondary';
 } & MuiTextFieldProps;
 
 const Container = styled(Box)`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 `;
 
-const TextField: FC<TextFieldProps> = (args) => {
-  const { error, errorMessage, helperMessage, variant, ...rest } = args; 
+const TextField: FC<TextFieldProps> = args => {
+	const { error, errorMessage, helperMessage, variant, ...rest } = args;
 
-  const Field = variant === 'primary' ? Primary : Secondary;
+	const Field = variant === 'secondary' ? Secondary : Primary;
 
-  return <Container>
-    {error && errorMessage && <InputError message={errorMessage} />}
-    <Field helperText={helperMessage} error={error} variant={'filled'} {...rest}/>
-  </Container>;
-}
+	return (
+		<Container>
+			{error && errorMessage && <InputError message={errorMessage} />}
+			<Field
+				helperText={helperMessage}
+				error={error}
+				variant={'filled'}
+				{...rest}
+			/>
+		</Container>
+	);
+};
 
 export default TextField;
