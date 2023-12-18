@@ -71,7 +71,7 @@ const Field = styled(TextField)({
 	'.MuiFormHelperText-root': {
 		margin: '4px 0 0 0',
 		padding: '0 8px',
-		color: GREY_500,
+		color: `${GREY_500} !important`,
 		fontSize: '12px',
 		fontStyle: 'normal',
 		fontWeight: '300',
@@ -107,7 +107,7 @@ const Label = styled(Box)`
 export type Props = TextFieldProps;
 
 export const Secondary: FC<Props> = props => {
-	const { label, ...rest } = props;
+	const { label, helperText, ...rest } = props;
 	const [focus, setFocus] = useState<boolean>(false);
 
 	return (

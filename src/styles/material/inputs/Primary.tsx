@@ -77,7 +77,7 @@ export const Primary = styled(TextField)({
 	'.MuiFormHelperText-root': {
 		margin: '4px 0 0 0',
 		padding: '0 8px',
-		color: GREY_500,
+		color: `${GREY_500} !important`,
 		fontSize: '12px',
 		fontStyle: 'normal',
 		fontWeight: '300',
