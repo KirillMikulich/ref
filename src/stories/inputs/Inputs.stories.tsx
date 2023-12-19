@@ -59,7 +59,7 @@ export default meta;
 
 type Story = StoryObj<TextFieldProps>;
 
-export const Standart: Story = {
+export const Standard: Story = {
 	args: {
 		variant: 'primary',
 		label: 'Lorem ipsum',

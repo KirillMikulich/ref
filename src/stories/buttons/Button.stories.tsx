@@ -50,7 +50,7 @@ export default meta;
 
 type Story = StoryObj<typeof StyledButton>;
 
-export const Standart: Story = {
+export const Standard: Story = {
 	args: {
 		variant: 'primary',
 		label: 'Default',

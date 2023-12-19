@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { CustomSelect } from './Select.component';
-import { SelectProps } from 'components/Controls/Select';
+import { SearchableProps } from 'components/Controls/Select';
+import { CustomSelectSearchable } from './Select.component';
 
-const meta: Meta<SelectProps> = {
+const meta: Meta<SearchableProps> = {
 	title: 'Select',
-	component: CustomSelect,
+	component: CustomSelectSearchable,
 	argTypes: {
 		label: {
 			type: 'string',
@@ -58,9 +58,9 @@ const meta: Meta<SelectProps> = {
 
 export default meta;
 
-type Story = StoryObj<SelectProps>;
+type Story = StoryObj<SearchableProps>;
 
-export const Standard: Story = {
+export const StandardSearchable: Story = {
 	args: {
 		label: 'Lorem ipsum',
 		items: [
@@ -73,15 +73,15 @@ export const Standard: Story = {
 		keyValue: 'id',
 		keyLabel: 'name',
 	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
+	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
 };
 
-export const Simple: Story = {
+export const SimpleSearchable: Story = {
 	args: {
 		label: 'Lorem ipsum',
 		items: ['1', '2', '3', '4'],
 		placeholder: 'Выберите значение',
 		useNullableItem: true,
 	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
+	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
 };
