@@ -76,6 +76,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		}
 	};
 
+	//+
 	const getOptionLabel = useCallback(
 		(option: any) => {
 			if (isValueIsObject(option)) return option?.[keyLabel]?.toString();
@@ -84,6 +85,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		[keyLabel, placeholder],
 	);
 
+	//+
 	const getOptionKey = useCallback(
 		(option: any) => {
 			if (isValueIsObject(option)) return option?.[keyValue]?.toString();
@@ -92,6 +94,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		[keyLabel, placeholder],
 	);
 
+	//+
 	const isOptionEqualToValue = useCallback(
 		(option: any, value: any) => {
 			const val = isValueIsObject(option) ? option?.[keyValue] : option;
