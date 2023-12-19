@@ -26,6 +26,11 @@ const meta: Meta<SearchableProps> = {
 			control: 'boolean',
 			defaultValue: true,
 		},
+		multiple: {
+			type: 'boolean',
+			control: 'boolean',
+			defaultValue: true,
+		},
 		keyValue: {
 			type: 'string',
 			defaultValue: 'id',
@@ -72,6 +77,7 @@ export const StandardSearchable: Story = {
 		useNullableItem: true,
 		keyValue: 'id',
 		keyLabel: 'name',
+		multiple: false,
 	},
 	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
 };
@@ -82,6 +88,9 @@ export const SimpleSearchable: Story = {
 		items: ['1', '2', '3', '4'],
 		placeholder: 'Выберите значение',
 		useNullableItem: true,
+		keyValue: 'id',
+		multiple: false,
+		keyLabel: 'name',
 	},
 	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
 };

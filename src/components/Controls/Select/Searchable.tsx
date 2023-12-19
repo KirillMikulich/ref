@@ -5,8 +5,9 @@ import {
 	TextField,
 	styled,
 } from '@mui/material';
-import React, { type FC } from 'react';
+import React, { useCallback, type FC, useMemo } from 'react';
 import InputError from '../InputError';
+import { isValueIsObject } from 'utils';
 
 export interface SearchableProps
 	extends AutocompleteProps<any, any, any, any, any> {
@@ -29,91 +30,105 @@ const Container = styled(Box)`
 
 export const Searchable: FC<SearchableProps> = props => {
 	const {
-		error,
-		errorMessage,
-		value,
-		items,
+		error = false,
+		errorMessage = '',
+		value = null,
+		items = [],
 		keyLabel = 'name',
 		keyValue = 'id',
 		label = '',
-		onChange,
+		onChange = undefined,
 		useNullableItem = true,
-		disabled,
-		placeholder,
-		multiple,
+		disabled = false,
+		placeholder = 'Выберите значение',
+		multiple = false,
 		...rest
 	} = props;
 
-	const values = useNullableItem
-		? [
-				typeof items?.[0] === 'object'
-					? { id: undefined, name: placeholder }
-					: undefined,
-				...(items ?? []),
-		  ]
-		: items;
+	const isValueIsCompound = useMemo(() => isValueIsObject(items?.[0]), [items]);
+
+	const options = useMemo(() => {
+		if (!items) return [];
+
+		if (useNullableItem) {
+			if (isValueIsCompound) {
+				return [{ id: undefined, name: placeholder }, ...items];
+			} else {
+				return [undefined, ...items];
+			}
+		}
+
+		return items;
+	}, [useNullableItem, items, placeholder, isValueIsCompound]);
 
 	const onSelect = (event: any, newValue: any, reason: any) => {
-		const updateValue =
-			typeof newValue === 'object' ? newValue?.[keyValue] : newValue;
+		const updateValue = Array.isArray(newValue)
+			? newValue
+			: typeof newValue === 'object'
+			? newValue?.[keyValue]
+			: newValue;
 		if (onChange) {
-			if (value === updateValue) return;
-
 			if (updateValue === undefined) {
-				onChange(null);
+				onChange(multiple ? [] : null);
 			} else {
 				onChange(updateValue);
 			}
 		}
 	};
 
-	const getOptionLabel = (option: any) => {
-		if (option === null || option === undefined) return placeholder;
-		if (typeof option === 'object') return option?.[keyLabel]?.toString();
-		return option?.toString();
-	};
+	const getOptionLabel = useCallback(
+		(option: any) => {
+			if (isValueIsObject(option)) return option?.[keyLabel]?.toString();
+			return option ? option : placeholder;
+		},
+		[keyLabel, placeholder],
+	);
 
-	const getOptionKey = (option: any) => {
-		if (option === null || option === undefined) return placeholder;
-		if (typeof option === 'object') return option?.[keyValue];
-		return option;
-	};
+	const getOptionKey = useCallback(
+		(option: any) => {
+			if (isValueIsObject(option)) return option?.[keyValue]?.toString();
+			return option ? option : placeholder;
+		},
+		[keyLabel, placeholder],
+	);
 
-	const isOptionEqualToValue = (option: any, value: any) => {
-		if (typeof option === 'object') {
-			const optionValue = option?.[keyValue];
-			if (
-				optionValue === undefined ||
-				(optionValue === null && value === placeholder)
-			)
-				return true;
-			return false;
-		} else if (
-			option === undefined ||
-			(option === null && value === placeholder)
-		) {
-			return true;
+	const isOptionEqualToValue = useCallback(
+		(option: any, value: any) => {
+			const val = isValueIsObject(option) ? option?.[keyValue] : option;
+			if (val === undefined) return true;
+			return option === value;
+		},
+		[keyValue],
+	);
+
+	const getValue = useCallback(() => {
+		if (multiple) {
+			if (value === null) return [];
+
+			return options?.filter(
+				(item: any) =>
+					value?.indexOf(typeof item === 'object' ? item?.[keyValue] : item) !==
+					-1,
+			);
+		} else {
+			if (value) {
+				return options?.find(
+					(item: any) =>
+						(typeof item === 'object' ? item[keyValue] : item) === value,
+				);
+			} else {
+				return placeholder;
+			}
 		}
-
-		return option === value;
-	};
+	}, [value, options]);
 
 	return (
 		<Container>
 			{error && errorMessage && <InputError message={errorMessage} />}
 			<Autocomplete
 				{...rest}
-				defaultValue={multiple ? [undefined] : undefined}
-				value={
-					value
-						? values?.find((item: any) =>
-								typeof item === 'object'
-									? item[keyValue] === value
-									: item === value,
-						  )
-						: placeholder
-				}
-				options={values ?? []}
+				value={getValue()}
+				options={options}
 				fullWidth
 				disableClearable={true}
 				freeSolo={false}
@@ -124,7 +139,12 @@ export const Searchable: FC<SearchableProps> = props => {
 				onChange={onSelect}
 				isOptionEqualToValue={isOptionEqualToValue}
 				renderInput={params => (
-					<TextField variant="filled" {...params} label={label} />
+					<TextField
+						variant="filled"
+						placeholder={placeholder}
+						{...params}
+						label={label}
+					/>
 				)}
 			/>
 		</Container>

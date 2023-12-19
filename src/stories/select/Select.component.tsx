@@ -18,7 +18,7 @@ export const CustomSelect: FC<SelectProps> = props => {
 };
 
 export const CustomSelectSearchable: FC<SearchableProps> = props => {
-	const [value, setValue] = useState<any>(null);
+	const [value, setValue] = useState<any>(props.multiple ? [] : null);
 	return (
 		<div>
 			<div>Selected item: {value ? value : 'null'}</div>
