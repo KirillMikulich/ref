@@ -57,7 +57,6 @@ export const Searchable: FC<SearchableProps> = props => {
 	}, [useNullableItem, items]);
 
 	const onSelect = (event: any, newValue: any, reason: any) => {
-		console.log(newValue, reason, options);
 		const updateValue = Array.isArray(newValue)
 			? newValue
 			: typeof newValue === 'object'
