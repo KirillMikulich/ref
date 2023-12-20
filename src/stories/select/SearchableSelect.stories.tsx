@@ -94,3 +94,33 @@ export const SimpleSearchable: Story = {
 	},
 	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
 };
+
+export const StandardSearchableMulti: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: [
+			{ id: 1, name: 'NAME-1' },
+			{ id: 2, name: 'NAME-2' },
+			{ id: 3, name: 'NAME-3' },
+		],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		keyValue: 'id',
+		keyLabel: 'name',
+		multiple: true,
+	},
+	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
+};
+
+export const SimpleSearchableMulti: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		keyValue: 'id',
+		multiple: true,
+		keyLabel: 'name',
+	},
+	render: (args: SearchableProps) => <CustomSelectSearchable {...args} />,
+};

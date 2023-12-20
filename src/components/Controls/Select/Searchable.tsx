@@ -32,7 +32,8 @@ export const Searchable: FC<SearchableProps> = props => {
 	const {
 		error = false,
 		errorMessage = '',
-		value = null,
+		multiple = false,
+		value = multiple ? [] : null,
 		items = [],
 		keyLabel = 'name',
 		keyValue = 'id',
@@ -41,7 +42,6 @@ export const Searchable: FC<SearchableProps> = props => {
 		useNullableItem = true,
 		disabled = false,
 		placeholder = 'Выберите значение',
-		multiple = false,
 		...rest
 	} = props;
 
@@ -57,16 +57,29 @@ export const Searchable: FC<SearchableProps> = props => {
 	}, [useNullableItem, items]);
 
 	const onSelect = (event: any, newValue: any, reason: any) => {
+		console.log(newValue, reason, options);
 		const updateValue = Array.isArray(newValue)
 			? newValue
 			: typeof newValue === 'object'
 			? newValue?.[keyValue]
 			: newValue;
 		if (onChange) {
-			if (updateValue === undefined) {
-				onChange(multiple ? [] : null);
+			if (Array.isArray(updateValue)) {
+				if (updateValue.indexOf(undefined) !== -1) {
+					onChange([]);
+				} else {
+					onChange(
+						updateValue?.map((item: any) =>
+							isValueIsObject(item) ? item?.[keyValue] : item,
+						) ?? [],
+					);
+				}
 			} else {
-				onChange(updateValue);
+				if (updateValue === undefined) {
+					onChange(multiple ? [] : null);
+				} else {
+					onChange(updateValue);
+				}
 			}
 		}
 	};
@@ -84,7 +97,7 @@ export const Searchable: FC<SearchableProps> = props => {
 	const getOptionKey = useCallback(
 		(option: any) => {
 			if (isValueIsObject(option)) return option?.[keyValue];
-			return option ? option : undefined;
+			return option;
 		},
 		[keyValue],
 	);
@@ -93,23 +106,26 @@ export const Searchable: FC<SearchableProps> = props => {
 	const isOptionEqualToValue = useCallback(
 		(option: any, value: any) => {
 			const val = isValueIsObject(option) ? option?.[keyValue] : option;
-			if (val === undefined) return true;
+			if (val === undefined) return false;
 			return option === value;
 		},
 		[keyValue],
 	);
 
-	const getValue = useCallback(() => {
+	const getValue = useMemo(() => {
 		if (multiple) {
 			if (value === null) return [];
-
-			return (
-				options?.filter(
-					(item: any) =>
-						value?.indexOf(isValueIsObject(item) ? item?.[keyValue] : item) !==
-						-1,
-				) ?? []
-			);
+			if (Array.isArray(value)) {
+				const sortedOptions =
+					options?.filter(
+						(item: any) =>
+							value?.indexOf(
+								isValueIsObject(item) ? item?.[keyValue] : item,
+							) !== -1,
+					) ?? [];
+				return sortedOptions;
+			}
+			return [];
 		} else {
 			if (value) {
 				const option = options?.find(
@@ -128,11 +144,11 @@ export const Searchable: FC<SearchableProps> = props => {
 			{error && errorMessage && <InputError message={errorMessage} />}
 			<Autocomplete
 				{...rest}
-				value={getValue()}
+				value={getValue}
 				options={options}
 				fullWidth
 				disableClearable={true}
-				freeSolo={false}
+				freeSolo={true}
 				multiple={multiple}
 				disabled={disabled}
 				noOptionsText={'Ничего не найдено'}
@@ -143,7 +159,9 @@ export const Searchable: FC<SearchableProps> = props => {
 				renderInput={params => (
 					<TextField
 						variant="filled"
-						placeholder={placeholder}
+						placeholder={
+							multiple && getValue?.length > 0 ? undefined : placeholder
+						}
 						{...params}
 						InputLabelProps={{
 							shrink: true,
