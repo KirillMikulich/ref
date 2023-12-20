@@ -45,21 +45,16 @@ export const Searchable: FC<SearchableProps> = props => {
 		...rest
 	} = props;
 
-	const isValueIsCompound = useMemo(() => isValueIsObject(items?.[0]), [items]);
-
+	//+
 	const options = useMemo(() => {
 		if (!items) return [];
 
 		if (useNullableItem) {
-			if (isValueIsCompound) {
-				return [{ id: undefined, name: placeholder }, ...items];
-			} else {
-				return [undefined, ...items];
-			}
+			return [undefined, ...items];
 		}
 
 		return items;
-	}, [useNullableItem, items, placeholder, isValueIsCompound]);
+	}, [useNullableItem, items]);
 
 	const onSelect = (event: any, newValue: any, reason: any) => {
 		const updateValue = Array.isArray(newValue)
@@ -79,7 +74,7 @@ export const Searchable: FC<SearchableProps> = props => {
 	//+
 	const getOptionLabel = useCallback(
 		(option: any) => {
-			if (isValueIsObject(option)) return option?.[keyLabel]?.toString();
+			if (isValueIsObject(option)) return option?.[keyLabel];
 			return option ? option : placeholder;
 		},
 		[keyLabel, placeholder],
@@ -88,10 +83,10 @@ export const Searchable: FC<SearchableProps> = props => {
 	//+
 	const getOptionKey = useCallback(
 		(option: any) => {
-			if (isValueIsObject(option)) return option?.[keyValue]?.toString();
-			return option ? option : placeholder;
+			if (isValueIsObject(option)) return option?.[keyValue];
+			return option ? option : undefined;
 		},
-		[keyLabel, placeholder],
+		[keyValue],
 	);
 
 	//+
@@ -108,22 +103,25 @@ export const Searchable: FC<SearchableProps> = props => {
 		if (multiple) {
 			if (value === null) return [];
 
-			return options?.filter(
-				(item: any) =>
-					value?.indexOf(typeof item === 'object' ? item?.[keyValue] : item) !==
-					-1,
+			return (
+				options?.filter(
+					(item: any) =>
+						value?.indexOf(isValueIsObject(item) ? item?.[keyValue] : item) !==
+						-1,
+				) ?? []
 			);
 		} else {
 			if (value) {
-				return options?.find(
+				const option = options?.find(
 					(item: any) =>
-						(typeof item === 'object' ? item[keyValue] : item) === value,
+						(isValueIsObject(item) ? item?.[keyValue] : item) === value,
 				);
-			} else {
-				return placeholder;
+				if (option?.[keyValue]) return option;
 			}
+
+			return undefined;
 		}
-	}, [value, options]);
+	}, [value, options, multiple, keyValue]);
 
 	return (
 		<Container>
@@ -137,6 +135,7 @@ export const Searchable: FC<SearchableProps> = props => {
 				freeSolo={false}
 				multiple={multiple}
 				disabled={disabled}
+				noOptionsText={'Ничего не найдено'}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
 				onChange={onSelect}
@@ -146,6 +145,9 @@ export const Searchable: FC<SearchableProps> = props => {
 						variant="filled"
 						placeholder={placeholder}
 						{...params}
+						InputLabelProps={{
+							shrink: true,
+						}}
 						label={label}
 					/>
 				)}
