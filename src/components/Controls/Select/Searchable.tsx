@@ -42,9 +42,11 @@ export const Searchable: FC<SearchableProps> = props => {
 		useNullableItem = true,
 		disabled = false,
 		placeholder = 'Выберите значение',
+		noOptionsText = 'Ничего не найдено',
 		...rest
 	} = props;
 
+	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
 	const options = useMemo(() => {
 		if (!items) return [];
 
@@ -58,9 +60,10 @@ export const Searchable: FC<SearchableProps> = props => {
 	const onSelect = (_: any, newValue: any) => {
 		const updateValue = Array.isArray(newValue)
 			? newValue
-			: typeof newValue === 'object'
+			: isValueIsObject(newValue)
 			? newValue?.[keyValue]
 			: newValue;
+
 		if (onChange) {
 			if (Array.isArray(updateValue)) {
 				if (updateValue.indexOf(undefined) !== -1) {
@@ -146,7 +149,25 @@ export const Searchable: FC<SearchableProps> = props => {
 				freeSolo={true}
 				multiple={multiple}
 				disabled={disabled}
-				noOptionsText={'Ничего не найдено'}
+				filterOptions={(options: any, { inputValue }: any) => {
+					if (!inputValue) return options;
+
+					const search = inputValue?.toLowerCase() ?? '';
+					const values = options.filter((item: any) =>
+						(isValueIsObject(item) ? item?.[keyLabel] : item)
+							?.toLowerCase()
+							.includes(search)
+					);
+
+					if (values.length) return values;
+					return isCompoundItem
+						? [{ [keyLabel]: noOptionsText, [keyValue]: undefined }]
+						: [noOptionsText];
+				}}
+				getOptionDisabled={(option: any) =>
+					(isValueIsObject(option) ? option?.[keyLabel] : option) ===
+					noOptionsText
+				}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
 				onChange={onSelect}

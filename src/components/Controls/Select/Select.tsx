@@ -116,6 +116,7 @@ export const Select: FC<SelectProps> = props => {
 					label={label}
 					value={value ?? null}
 					displayEmpty
+					onClose={() => setOpenList(false)}
 					multiple={multiple}
 					{...rest}
 					open={openList}
