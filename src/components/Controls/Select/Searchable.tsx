@@ -45,7 +45,6 @@ export const Searchable: FC<SearchableProps> = props => {
 		...rest
 	} = props;
 
-	//+
 	const options = useMemo(() => {
 		if (!items) return [];
 
@@ -56,7 +55,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		return items;
 	}, [useNullableItem, items]);
 
-	const onSelect = (event: any, newValue: any, reason: any) => {
+	const onSelect = (_: any, newValue: any) => {
 		const updateValue = Array.isArray(newValue)
 			? newValue
 			: typeof newValue === 'object'
@@ -69,8 +68,8 @@ export const Searchable: FC<SearchableProps> = props => {
 				} else {
 					onChange(
 						updateValue?.map((item: any) =>
-							isValueIsObject(item) ? item?.[keyValue] : item,
-						) ?? [],
+							isValueIsObject(item) ? item?.[keyValue] : item
+						) ?? []
 					);
 				}
 			} else {
@@ -83,32 +82,29 @@ export const Searchable: FC<SearchableProps> = props => {
 		}
 	};
 
-	//+
 	const getOptionLabel = useCallback(
 		(option: any) => {
 			if (isValueIsObject(option)) return option?.[keyLabel];
 			return option ? option : placeholder;
 		},
-		[keyLabel, placeholder],
+		[keyLabel, placeholder]
 	);
 
-	//+
 	const getOptionKey = useCallback(
 		(option: any) => {
 			if (isValueIsObject(option)) return option?.[keyValue];
 			return option;
 		},
-		[keyValue],
+		[keyValue]
 	);
 
-	//+
 	const isOptionEqualToValue = useCallback(
 		(option: any, value: any) => {
 			const val = isValueIsObject(option) ? option?.[keyValue] : option;
 			if (val === undefined) return false;
 			return option === value;
 		},
-		[keyValue],
+		[keyValue]
 	);
 
 	const getValue = useMemo(() => {
@@ -119,8 +115,8 @@ export const Searchable: FC<SearchableProps> = props => {
 					options?.filter(
 						(item: any) =>
 							value?.indexOf(
-								isValueIsObject(item) ? item?.[keyValue] : item,
-							) !== -1,
+								isValueIsObject(item) ? item?.[keyValue] : item
+							) !== -1
 					) ?? [];
 				return sortedOptions;
 			}
@@ -129,7 +125,7 @@ export const Searchable: FC<SearchableProps> = props => {
 			if (value) {
 				const option = options?.find(
 					(item: any) =>
-						(isValueIsObject(item) ? item?.[keyValue] : item) === value,
+						(isValueIsObject(item) ? item?.[keyValue] : item) === value
 				);
 				if (option?.[keyValue]) return option;
 			}

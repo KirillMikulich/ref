@@ -1,4 +1,4 @@
-import React, { useMemo, type FC } from 'react';
+import React, { useMemo, type FC, useCallback } from 'react';
 import {
 	FormControl,
 	InputLabel,
@@ -39,6 +39,7 @@ export const Select: FC<SelectProps> = props => {
 		placeholder = 'Выберите значение',
 		keyLabel = 'id',
 		keyValue = 'name',
+		multiple = false,
 		onChange,
 		value,
 		...rest
@@ -66,11 +67,14 @@ export const Select: FC<SelectProps> = props => {
 		return null;
 	}, [items, keyLabel, keyValue]);
 
-	const onSelect = ({ target: { value } }: SelectChangeEvent<any>) => {
-		if (onChange) {
-			onChange(value ? value : null);
-		}
-	};
+	const onSelect = useCallback(
+		({ target: { value } }: SelectChangeEvent<any>) => {
+			if (onChange) {
+				onChange(value ? value : null);
+			}
+		},
+		[onChange]
+	);
 
 	return (
 		<Container>
@@ -80,9 +84,13 @@ export const Select: FC<SelectProps> = props => {
 				<MuiSelect
 					variant="filled"
 					label={label}
-					value={value ? value : undefined}
+					value={value ? value : null}
 					displayEmpty
+					multiple={multiple}
 					{...rest}
+					renderValue={(value: any) =>
+						value === undefined || value === null ? placeholder : value
+					}
 					onChange={onSelect}
 				>
 					{useNullableItem && (
