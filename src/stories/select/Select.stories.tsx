@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { CustomSelect } from './Select.component';
-import { SelectProps } from 'components/Controls/Select';
+import { StandardSelectProps } from 'components/Controls/Select';
 
-const meta: Meta<SelectProps> = {
+const meta: Meta<StandardSelectProps> = {
 	title: 'Select',
 	component: CustomSelect,
 	argTypes: {
@@ -12,6 +12,11 @@ const meta: Meta<SelectProps> = {
 			description: 'Label for input',
 			defaultValue: '',
 			control: { type: 'text' },
+		},
+		isSearchable: {
+			type: 'boolean',
+			control: 'boolean',
+			defaultValue: false,
 		},
 		items: {
 			control: 'array',
@@ -63,7 +68,7 @@ const meta: Meta<SelectProps> = {
 
 export default meta;
 
-type Story = StoryObj<SelectProps>;
+type Story = StoryObj<StandardSelectProps>;
 
 export const Standard: Story = {
 	args: {
@@ -78,8 +83,9 @@ export const Standard: Story = {
 		keyValue: 'id',
 		keyLabel: 'name',
 		multiple: false,
+		isSearchable: false,
 	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
 };
 
 export const Simple: Story = {
@@ -89,34 +95,7 @@ export const Simple: Story = {
 		placeholder: 'Выберите значение',
 		useNullableItem: true,
 		multiple: false,
+		isSearchable: false,
 	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
-};
-
-export const StandardMulti: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: [
-			{ id: 1, name: 'NAME-1' },
-			{ id: 2, name: 'NAME-2' },
-			{ id: 3, name: 'NAME-3' },
-		],
-		placeholder: 'Выберите значение',
-		useNullableItem: true,
-		keyValue: 'id',
-		keyLabel: 'name',
-		multiple: true,
-	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
-};
-
-export const SimpleMulti: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		useNullableItem: true,
-		multiple: true,
-	},
-	render: (args: SelectProps) => <CustomSelect {...args} />,
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
 };

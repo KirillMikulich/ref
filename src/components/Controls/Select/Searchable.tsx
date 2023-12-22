@@ -1,31 +1,18 @@
-import {
-	Autocomplete,
-	AutocompleteProps,
-	Box,
-	TextField,
-	styled,
-} from '@mui/material';
+import { Autocomplete, AutocompleteProps, Box, TextField, styled } from '@mui/material';
 import React, { useCallback, type FC, useMemo } from 'react';
 import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
+import { DefaultSelectProps } from './models';
 
 export interface SearchableProps
-	extends AutocompleteProps<any, any, any, any, any> {
-	items?: any[];
-	label?: string;
-	placeholder?: string;
-	useNullableItem?: boolean;
-	keyLabel?: string;
-	keyValue?: string;
-	errorMessage?: string;
-	error?: boolean;
+	extends DefaultSelectProps,
+		AutocompleteProps<any, any, any, any, any> {
 	onChange?: (value: any) => void;
-	helperText?: string;
 }
 
 const Container = styled(Box)`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 `;
 
 export const Searchable: FC<SearchableProps> = props => {
@@ -71,9 +58,7 @@ export const Searchable: FC<SearchableProps> = props => {
 					onChange([]);
 				} else {
 					onChange(
-						updateValue?.map((item: any) =>
-							isValueIsObject(item) ? item?.[keyValue] : item
-						) ?? []
+						updateValue?.map((item: any) => (isValueIsObject(item) ? item?.[keyValue] : item)) ?? []
 					);
 				}
 			} else {
@@ -117,10 +102,7 @@ export const Searchable: FC<SearchableProps> = props => {
 			if (Array.isArray(value)) {
 				const sortedOptions =
 					options?.filter(
-						(item: any) =>
-							value?.indexOf(
-								isValueIsObject(item) ? item?.[keyValue] : item
-							) !== -1
+						(item: any) => value?.indexOf(isValueIsObject(item) ? item?.[keyValue] : item) !== -1
 					) ?? [];
 				return sortedOptions;
 			}
@@ -128,8 +110,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		} else {
 			if (value) {
 				const option = options?.find(
-					(item: any) =>
-						(isValueIsObject(item) ? item?.[keyValue] : item) === value
+					(item: any) => (isValueIsObject(item) ? item?.[keyValue] : item) === value
 				);
 				if (option?.[keyValue]) return option;
 			}
@@ -155,9 +136,7 @@ export const Searchable: FC<SearchableProps> = props => {
 
 					const search = inputValue?.toLowerCase() ?? '';
 					const values = options.filter((item: any) =>
-						(isValueIsObject(item) ? item?.[keyLabel] : item)
-							?.toLowerCase()
-							.includes(search)
+						(isValueIsObject(item) ? item?.[keyLabel] : item)?.toLowerCase().includes(search)
 					);
 
 					if (values.length) return values;
@@ -166,8 +145,7 @@ export const Searchable: FC<SearchableProps> = props => {
 						: [noOptionsText];
 				}}
 				getOptionDisabled={(option: any) =>
-					(isValueIsObject(option) ? option?.[keyLabel] : option) ===
-					noOptionsText
+					(isValueIsObject(option) ? option?.[keyLabel] : option) === noOptionsText
 				}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
@@ -176,9 +154,7 @@ export const Searchable: FC<SearchableProps> = props => {
 				renderInput={params => (
 					<TextField
 						variant="filled"
-						placeholder={
-							multiple && getValue?.length > 0 ? undefined : placeholder
-						}
+						placeholder={multiple && getValue?.length > 0 ? undefined : placeholder}
 						{...params}
 						InputLabelProps={{
 							shrink: true,

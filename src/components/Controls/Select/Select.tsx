@@ -11,18 +11,11 @@ import {
 } from '@mui/material';
 import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
+import { DefaultSelectProps } from './models';
 
-export interface SelectProps extends MuiSelectProps {
-	items?: any[];
-	label?: string;
-	placeholder?: string;
-	useNullableItem?: boolean;
-	keyLabel?: string;
-	keyValue?: string;
-	errorMessage?: string;
-	error?: boolean;
+export interface SelectProps extends MuiSelectProps, DefaultSelectProps {
 	onChange?: (value: any) => void;
-	helperText?: string;
+	label?: string;
 }
 
 const Container = styled(Box)`
@@ -32,8 +25,8 @@ const Container = styled(Box)`
 
 export const Select: FC<SelectProps> = props => {
 	const {
-		error,
-		errorMessage,
+		error = false,
+		errorMessage = '',
 		items = [],
 		label = '',
 		useNullableItem = true,
@@ -41,11 +34,12 @@ export const Select: FC<SelectProps> = props => {
 		keyLabel = 'id',
 		keyValue = 'name',
 		multiple = false,
-		onChange,
+		onChange = undefined,
 		value = multiple ? [] : null,
 		helperText = '',
 		...rest
 	} = props;
+
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
 	const [openList, setOpenList] = useState<boolean>(false);
 
@@ -90,7 +84,7 @@ export const Select: FC<SelectProps> = props => {
 		if (isCompoundItem) {
 			if (multiple) {
 				return items
-					.filter((item: any) => (value as Array<any>).indexOf(item[keyValue]) !== -1)
+					.filter((item: any) => (value as Array<any>)?.indexOf(item[keyValue]) !== -1)
 					.map((item: any) => item?.[keyLabel] ?? '')
 					.join(', ');
 			}
@@ -98,7 +92,7 @@ export const Select: FC<SelectProps> = props => {
 			return items.find((item: any) => item?.[keyValue] === value)?.[keyLabel] ?? '';
 		}
 		return multiple ? (value as Array<any>).join(', ') : value;
-	}, [value, multiple, keyLabel, keyValue, isCompoundItem]);
+	}, [value, multiple, keyLabel, keyValue, isCompoundItem, items]);
 
 	return (
 		<Container>
