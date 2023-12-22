@@ -53,6 +53,11 @@ const meta: Meta<SelectProps> = {
 			defaultValue: '',
 			if: { arg: 'error', truthy: true },
 		},
+		multiple: {
+			type: 'boolean',
+			control: 'boolean',
+			defaultValue: false,
+		},
 	},
 };
 
@@ -72,6 +77,7 @@ export const Standard: Story = {
 		useNullableItem: true,
 		keyValue: 'id',
 		keyLabel: 'name',
+		multiple: false,
 	},
 	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
@@ -82,6 +88,35 @@ export const Simple: Story = {
 		items: ['1', '2', '3', '4'],
 		placeholder: 'Выберите значение',
 		useNullableItem: true,
+		multiple: false,
+	},
+	render: (args: SelectProps) => <CustomSelect {...args} />,
+};
+
+export const StandardMulti: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: [
+			{ id: 1, name: 'NAME-1' },
+			{ id: 2, name: 'NAME-2' },
+			{ id: 3, name: 'NAME-3' },
+		],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		keyValue: 'id',
+		keyLabel: 'name',
+		multiple: true,
+	},
+	render: (args: SelectProps) => <CustomSelect {...args} />,
+};
+
+export const SimpleMulti: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		multiple: true,
 	},
 	render: (args: SelectProps) => <CustomSelect {...args} />,
 };

@@ -1,4 +1,4 @@
-import React, { useMemo, type FC, useCallback } from 'react';
+import React, { useMemo, type FC, useCallback, useState } from 'react';
 import {
 	FormControl,
 	InputLabel,
@@ -41,9 +41,11 @@ export const Select: FC<SelectProps> = props => {
 		keyValue = 'name',
 		multiple = false,
 		onChange,
-		value,
+		value = multiple ? [] : null,
 		...rest
 	} = props;
+
+	const [openList, setOpenList] = useState<boolean>(false);
 
 	const RenderItems = useMemo(() => {
 		if (items?.length > 0) {
@@ -70,10 +72,19 @@ export const Select: FC<SelectProps> = props => {
 	const onSelect = useCallback(
 		({ target: { value } }: SelectChangeEvent<any>) => {
 			if (onChange) {
-				onChange(value ? value : null);
+				if (multiple) {
+					if (value.indexOf(undefined) !== -1) {
+						onChange([]);
+					} else {
+						onChange(value);
+					}
+				} else {
+					onChange(value ? value : null);
+				}
 			}
+			setOpenList(false);
 		},
-		[onChange]
+		[onChange, multiple]
 	);
 
 	return (
@@ -84,12 +95,16 @@ export const Select: FC<SelectProps> = props => {
 				<MuiSelect
 					variant="filled"
 					label={label}
-					value={value ? value : null}
+					value={value ?? null}
 					displayEmpty
 					multiple={multiple}
 					{...rest}
+					open={openList}
+					onOpen={() => setOpenList(true)}
 					renderValue={(value: any) =>
-						value === undefined || value === null ? placeholder : value
+						value === undefined || value === null || value?.length === 0
+							? placeholder
+							: value
 					}
 					onChange={onSelect}
 				>
