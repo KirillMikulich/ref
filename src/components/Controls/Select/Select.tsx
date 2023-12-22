@@ -10,6 +10,7 @@ import {
 	Box,
 } from '@mui/material';
 import InputError from '../InputError';
+import { isValueIsObject } from 'utils';
 
 export interface SelectProps extends MuiSelectProps {
 	items?: any[];
@@ -44,7 +45,7 @@ export const Select: FC<SelectProps> = props => {
 		value = multiple ? [] : null,
 		...rest
 	} = props;
-
+	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
 	const [openList, setOpenList] = useState<boolean>(false);
 
 	const RenderItems = useMemo(() => {
@@ -87,6 +88,24 @@ export const Select: FC<SelectProps> = props => {
 		[onChange, multiple]
 	);
 
+	const values = useMemo(() => {
+		if (isCompoundItem) {
+			if (multiple) {
+				return items
+					.filter(
+						(item: any) => (value as Array<any>).indexOf(item[keyValue]) !== -1
+					)
+					.map((item: any) => item?.[keyLabel] ?? '')
+					.join(', ');
+			}
+
+			return (
+				items.find((item: any) => item?.[keyValue] === value)?.[keyLabel] ?? ''
+			);
+		}
+		return multiple ? (value as Array<any>).join(', ') : value;
+	}, [value, multiple, keyLabel, keyValue, isCompoundItem]);
+
 	return (
 		<Container>
 			{error && errorMessage && <InputError message={errorMessage} />}
@@ -104,7 +123,7 @@ export const Select: FC<SelectProps> = props => {
 					renderValue={(value: any) =>
 						value === undefined || value === null || value?.length === 0
 							? placeholder
-							: value
+							: values
 					}
 					onChange={onSelect}
 				>
