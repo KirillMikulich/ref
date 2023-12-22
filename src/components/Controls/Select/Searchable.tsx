@@ -19,8 +19,8 @@ export interface SearchableProps
 	keyValue?: string;
 	errorMessage?: string;
 	error?: boolean;
-	isMulti?: boolean;
 	onChange?: (value: any) => void;
+	helperText?: string;
 }
 
 const Container = styled(Box)`
@@ -43,6 +43,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		disabled = false,
 		placeholder = 'Выберите значение',
 		noOptionsText = 'Ничего не найдено',
+		helperText = '',
 		...rest
 	} = props;
 

@@ -22,7 +22,7 @@ export interface SelectProps extends MuiSelectProps {
 	errorMessage?: string;
 	error?: boolean;
 	onChange?: (value: any) => void;
-	isSearchable?: boolean;
+	helperText?: string;
 }
 
 const Container = styled(Box)`
@@ -43,6 +43,7 @@ export const Select: FC<SelectProps> = props => {
 		multiple = false,
 		onChange,
 		value = multiple ? [] : null,
+		helperText = '',
 		...rest
 	} = props;
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
@@ -52,10 +53,7 @@ export const Select: FC<SelectProps> = props => {
 		if (items?.length > 0) {
 			if (typeof items[0] === 'object') {
 				return items.map((item: any, index: number) => (
-					<MenuItem
-						key={item?.[keyValue] || index}
-						value={item?.[keyValue] ?? undefined}
-					>
+					<MenuItem key={item?.[keyValue] || index} value={item?.[keyValue] ?? undefined}>
 						{item?.[keyLabel] ?? ''}
 					</MenuItem>
 				));
@@ -92,16 +90,12 @@ export const Select: FC<SelectProps> = props => {
 		if (isCompoundItem) {
 			if (multiple) {
 				return items
-					.filter(
-						(item: any) => (value as Array<any>).indexOf(item[keyValue]) !== -1
-					)
+					.filter((item: any) => (value as Array<any>).indexOf(item[keyValue]) !== -1)
 					.map((item: any) => item?.[keyLabel] ?? '')
 					.join(', ');
 			}
 
-			return (
-				items.find((item: any) => item?.[keyValue] === value)?.[keyLabel] ?? ''
-			);
+			return items.find((item: any) => item?.[keyValue] === value)?.[keyLabel] ?? '';
 		}
 		return multiple ? (value as Array<any>).join(', ') : value;
 	}, [value, multiple, keyLabel, keyValue, isCompoundItem]);
@@ -122,15 +116,11 @@ export const Select: FC<SelectProps> = props => {
 					open={openList}
 					onOpen={() => setOpenList(true)}
 					renderValue={(value: any) =>
-						value === undefined || value === null || value?.length === 0
-							? placeholder
-							: values
+						value === undefined || value === null || value?.length === 0 ? placeholder : values
 					}
 					onChange={onSelect}
 				>
-					{useNullableItem && (
-						<MenuItem value={undefined}>{placeholder}</MenuItem>
-					)}
+					{useNullableItem && <MenuItem value={undefined}>{placeholder}</MenuItem>}
 					{RenderItems}
 				</MuiSelect>
 			</FormControl>
