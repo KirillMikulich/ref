@@ -114,7 +114,9 @@ export const Select: FC<SelectProps> = props => {
 					}
 					onChange={onSelect}
 				>
-					{useNullableItem && <MenuItem value={undefined}>{placeholder}</MenuItem>}
+					{useNullableItem && placeholder?.length > 0 && (
+						<MenuItem value={undefined}>{placeholder}</MenuItem>
+					)}
 					{RenderItems}
 				</MuiSelect>
 			</FormControl>
