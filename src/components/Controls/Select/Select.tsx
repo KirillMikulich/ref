@@ -12,16 +12,54 @@ import {
 import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PropTypes from 'prop-types';
+import { GREY_100, GREY_200, GREY_500, GREY_900 } from 'styles/constants';
 
 export interface SelectProps extends MuiSelectProps, DefaultSelectProps {
 	onChange?: (value: any) => void;
 	label?: string;
 }
 
-const Container = styled(Box)`
-	display: flex;
-	flex-direction: row;
-`;
+const Container = styled(Box)({
+	display: 'flex',
+	flexDirection: 'row',
+});
+
+const Control = styled(FormControl)({});
+const Label = styled(InputLabel)({
+	left: '8px',
+	transform: 'none',
+	top: '8px',
+	color: `${GREY_500} !important`,
+	fontSize: '12px',
+	fontStyle: 'normal',
+	fontWeight: '300',
+	lineHeight: 'normal',
+});
+const CustomSelect = styled(MuiSelect)<{ focus: boolean }>(({ focus }) => ({
+	borderRadius: '8px',
+	minHeight: '52px',
+	alignItems: 'end',
+	background: `${focus ? GREY_200 : GREY_100} !important`,
+	'&:before': {
+		display: 'none',
+	},
+	'&:after': {
+		display: 'none',
+	},
+	'& .MuiInputBase-input': {
+		/* position: 'static',
+		height: '70% !important',
+		borderRadius: '8px', */
+		alignItems: 'end',
+		padding: '8px',
+		'&:focus': {
+			background: 'transparent',
+		},
+		'& .MuiSvgIcon-root': {},
+	},
+}));
 
 export const Select: FC<SelectProps> = props => {
 	const {
@@ -42,6 +80,7 @@ export const Select: FC<SelectProps> = props => {
 
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
 	const [openList, setOpenList] = useState<boolean>(false);
+	const [focus, setFocus] = useState<boolean>(false);
 
 	const RenderItems = useMemo(() => {
 		if (items?.length > 0) {
@@ -97,16 +136,20 @@ export const Select: FC<SelectProps> = props => {
 	return (
 		<Container>
 			{error && errorMessage && <InputError message={errorMessage} />}
-			<FormControl fullWidth>
-				<InputLabel shrink>{label}</InputLabel>
-				<MuiSelect
+			<Control fullWidth>
+				<Label shrink>{label}</Label>
+				<CustomSelect
+					focus={focus}
 					variant="filled"
 					label={label}
+					onFocus={() => setFocus(true)}
+					onBlur={() => setFocus(false)}
 					value={value ?? null}
 					displayEmpty
 					onClose={() => setOpenList(false)}
 					multiple={multiple}
 					{...rest}
+					IconComponent={props => <ExpandMoreIcon fontSize="large" {...props} />}
 					open={openList}
 					onOpen={() => setOpenList(true)}
 					renderValue={(value: any) =>
@@ -118,8 +161,8 @@ export const Select: FC<SelectProps> = props => {
 						<MenuItem value={undefined}>{placeholder}</MenuItem>
 					)}
 					{RenderItems}
-				</MuiSelect>
-			</FormControl>
+				</CustomSelect>
+			</Control>
 		</Container>
 	);
 };
