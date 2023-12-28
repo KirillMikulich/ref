@@ -1,8 +1,19 @@
-import { Autocomplete, AutocompleteProps, Box, TextField, styled } from '@mui/material';
-import React, { useCallback, type FC, useMemo } from 'react';
+import {
+	Autocomplete,
+	AutocompleteProps,
+	Box,
+	InputAdornment,
+	TextField,
+	styled,
+} from '@mui/material';
+import React, { useCallback, type FC, useMemo, useState } from 'react';
 import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
+import HelperText from '../HelperText';
+import { BLUE_400, GREY_500, GREY_900 } from 'styles/constants';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 export interface SearchableProps
 	extends DefaultSelectProps,
@@ -14,6 +25,66 @@ const Container = styled(Box)`
 	display: flex;
 	flex-direction: column;
 `;
+
+const AutoCompleteCustom = styled(Autocomplete)({
+	borderRadius: '8px',
+	'& .MuiInputBase-root': {
+		'&:before': {
+			display: 'none',
+		},
+		'&:after': {
+			display: 'none',
+		},
+	},
+	'& .MuiInputLabel-root': {
+		left: '8.5px',
+		transform: 'none',
+		top: '8px',
+		color: `${GREY_500} !important`,
+		fontSize: '12px',
+
+		fontStyle: 'normal',
+		fontWeight: '300',
+		lineHeight: 'normal',
+	},
+	'& .MuiFilledInput-root': {
+		borderRadius: '8px',
+		padding: '0 8px 8px 8px',
+		alignItems: 'end',
+		minHeight: '52px',
+		'& .MuiFilledInput-input': {
+			padding: '0px',
+			caretColor: BLUE_400,
+			fontFamily: 'Inter',
+			fontSize: '14px',
+			fontStyle: 'normal',
+			fontWeight: '400',
+			lineHeight: 'normal',
+			color: GREY_900,
+			'&::placeholder': {
+				color: GREY_900,
+				opacity: '1',
+				fontFamily: 'Inter',
+				fontSize: '14px',
+				fontStyle: 'normal',
+				fontWeight: '400',
+				lineHeight: 'normal',
+			},
+		},
+	},
+	'& .MuiAutocomplete-endAdornment': {
+		'& .MuiIconButton-root': {
+			padding: '0',
+			marginRight: '-5px',
+			marginTop: '-2px',
+			'&:hover': {
+				background: 'transparent',
+			},
+		},
+	},
+});
+
+const Field = styled(TextField)({});
 
 export const Searchable: FC<SearchableProps> = props => {
 	const {
@@ -33,7 +104,6 @@ export const Searchable: FC<SearchableProps> = props => {
 		helperText = '',
 		...rest
 	} = props;
-
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
 	const options = useMemo(() => {
 		if (!items) return [];
@@ -122,13 +192,12 @@ export const Searchable: FC<SearchableProps> = props => {
 	return (
 		<Container>
 			{error && errorMessage && <InputError message={errorMessage} />}
-			<Autocomplete
+			<AutoCompleteCustom
 				{...rest}
 				value={getValue}
 				options={options}
 				fullWidth
 				disableClearable={true}
-				freeSolo={true}
 				multiple={multiple}
 				disabled={disabled}
 				filterOptions={(options: any, { inputValue }: any) => {
@@ -147,12 +216,13 @@ export const Searchable: FC<SearchableProps> = props => {
 				getOptionDisabled={(option: any) =>
 					(isValueIsObject(option) ? option?.[keyLabel] : option) === noOptionsText
 				}
+				popupIcon={<ExpandMoreIcon fontSize="large" />}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
 				onChange={onSelect}
 				isOptionEqualToValue={isOptionEqualToValue}
 				renderInput={params => (
-					<TextField
+					<Field
 						variant="filled"
 						placeholder={multiple && getValue?.length > 0 ? undefined : placeholder}
 						{...params}
@@ -163,6 +233,7 @@ export const Searchable: FC<SearchableProps> = props => {
 					/>
 				)}
 			/>
+			<HelperText helperText={helperText} />
 		</Container>
 	);
 };

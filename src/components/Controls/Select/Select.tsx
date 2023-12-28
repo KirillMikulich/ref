@@ -91,6 +91,11 @@ const CustomSelect = styled(MuiSelect)<SelectCSSProps>(props => ({
 		'-webkit-text-fill-color': 'inherit',
 		background: 'transparent',
 	},
+	'& .MuiSvgIcon-root': {
+		padding: '0',
+		marginRight: '-5px',
+		marginTop: '-2px',
+	},
 	'&:has(.Mui-disabled) .MuiSvgIcon-root': {
 		display: 'none',
 	},
