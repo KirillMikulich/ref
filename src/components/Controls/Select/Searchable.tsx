@@ -11,9 +11,8 @@ import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
 import HelperText from '../HelperText';
-import { BLUE_400, GREY_500, GREY_900 } from 'styles/constants';
+import { BLUE_400, GREY_100, GREY_200, GREY_500, GREY_900, RED_100 } from 'styles/constants';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 export interface SearchableProps
 	extends DefaultSelectProps,
@@ -26,8 +25,30 @@ const Container = styled(Box)`
 	flex-direction: column;
 `;
 
-const AutoCompleteCustom = styled(Autocomplete)({
+interface AutoCompleteCSSProperties {
+	error: boolean;
+	disabled: boolean;
+}
+
+const getColor = (props: AutoCompleteCSSProperties): string => {
+	if (props.error) {
+		return RED_100;
+	}
+
+	if (props.disabled) {
+		return 'white';
+	}
+
+	return GREY_100;
+};
+
+const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props => ({
 	borderRadius: '8px',
+	background: getColor(props),
+	border: props.disabled ? `1px solid ${GREY_200}` : 'none',
+	'&:has(.Mui-focused)': {
+		background: props.error ? RED_100 : GREY_200,
+	},
 	'& .MuiInputBase-root': {
 		'&:before': {
 			display: 'none',
@@ -52,6 +73,10 @@ const AutoCompleteCustom = styled(Autocomplete)({
 		padding: '0 8px 8px 8px',
 		alignItems: 'end',
 		minHeight: '52px',
+		background: 'transparent',
+		'&:hover': {
+			background: 'transparent',
+		},
 		'& .MuiFilledInput-input': {
 			padding: '0px',
 			caretColor: BLUE_400,
@@ -71,8 +96,15 @@ const AutoCompleteCustom = styled(Autocomplete)({
 				lineHeight: 'normal',
 			},
 		},
+		'& .Mui-disabled': {
+			'-webkit-text-fill-color': 'inherit',
+			background: 'transparent',
+		},
 	},
 	'& .MuiAutocomplete-endAdornment': {
+		'&:has(.Mui-disabled)': {
+			display: 'none',
+		},
 		'& .MuiIconButton-root': {
 			padding: '0',
 			marginRight: '-5px',
@@ -82,7 +114,7 @@ const AutoCompleteCustom = styled(Autocomplete)({
 			},
 		},
 	},
-});
+}));
 
 const Field = styled(TextField)({});
 
@@ -195,6 +227,7 @@ export const Searchable: FC<SearchableProps> = props => {
 			<AutoCompleteCustom
 				{...rest}
 				value={getValue}
+				error={error}
 				options={options}
 				fullWidth
 				disableClearable={true}
