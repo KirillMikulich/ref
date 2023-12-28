@@ -63,6 +63,11 @@ const meta: Meta<StandardSelectProps> = {
 			control: 'boolean',
 			defaultValue: false,
 		},
+		helperText: {
+			type: 'string',
+			control: 'text',
+			defaultValue: '',
+		},
 	},
 };
 
@@ -96,6 +101,59 @@ export const Simple: Story = {
 		useNullableItem: true,
 		multiple: false,
 		isSearchable: false,
+	},
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+};
+
+export const HelperText: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		multiple: false,
+		isSearchable: false,
+		helperText: 'Help message',
+	},
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+};
+
+export const Error: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		multiple: false,
+		isSearchable: false,
+		error: true,
+	},
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+};
+
+export const ErrorMessage: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		multiple: false,
+		isSearchable: false,
+		error: true,
+		errorMessage: 'Error message',
+	},
+	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+};
+
+export const DisabledReadonly: Story = {
+	args: {
+		label: 'Lorem ipsum',
+		items: ['1', '2', '3', '4'],
+		placeholder: 'Выберите значение',
+		useNullableItem: true,
+		multiple: false,
+		isSearchable: false,
+		disabled: true,
 	},
 	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
 };

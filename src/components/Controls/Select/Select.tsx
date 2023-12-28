@@ -13,8 +13,8 @@ import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PropTypes from 'prop-types';
-import { GREY_100, GREY_200, GREY_500, GREY_900 } from 'styles/constants';
+import { GREY_100, GREY_200, GREY_500, GREY_900, RED_100 } from 'styles/constants';
+import HelperText from '../HelperText';
 
 export interface SelectProps extends MuiSelectProps, DefaultSelectProps {
 	onChange?: (value: any) => void;
@@ -23,10 +23,13 @@ export interface SelectProps extends MuiSelectProps, DefaultSelectProps {
 
 const Container = styled(Box)({
 	display: 'flex',
-	flexDirection: 'row',
+	flexDirection: 'column',
 });
 
-const Control = styled(FormControl)({});
+const Control = styled(FormControl)({
+	display: 'flex',
+	flexDirection: 'column',
+});
 const Label = styled(InputLabel)({
 	left: '8px',
 	transform: 'none',
@@ -37,11 +40,35 @@ const Label = styled(InputLabel)({
 	fontWeight: '300',
 	lineHeight: 'normal',
 });
-const CustomSelect = styled(MuiSelect)<{ focus: boolean }>(({ focus }) => ({
+
+interface SelectCSSProps {
+	focus: boolean;
+	error: boolean;
+	disabled: boolean;
+}
+
+const getColor = (props: SelectCSSProps): string => {
+	if (props.error) {
+		return RED_100;
+	}
+
+	if (props.focus) {
+		return GREY_200;
+	}
+
+	if (props.disabled) {
+		return 'white';
+	}
+
+	return GREY_100;
+};
+
+const CustomSelect = styled(MuiSelect)<SelectCSSProps>(props => ({
 	borderRadius: '8px',
 	minHeight: '52px',
 	alignItems: 'end',
-	background: `${focus ? GREY_200 : GREY_100} !important`,
+	background: `${getColor(props)} !important`,
+	border: props.disabled ? `1px solid ${GREY_200}` : 'none',
 	'&:before': {
 		display: 'none',
 	},
@@ -49,15 +76,23 @@ const CustomSelect = styled(MuiSelect)<{ focus: boolean }>(({ focus }) => ({
 		display: 'none',
 	},
 	'& .MuiInputBase-input': {
-		/* position: 'static',
-		height: '70% !important',
-		borderRadius: '8px', */
 		alignItems: 'end',
 		padding: '8px',
+		color: GREY_900,
+		fontWeight: '400',
+		fontStyle: 'normal',
+		fontSize: '14px',
+		lineHeight: 'normal',
 		'&:focus': {
 			background: 'transparent',
 		},
-		'& .MuiSvgIcon-root': {},
+	},
+	'& .Mui-disabled': {
+		'-webkit-text-fill-color': 'inherit',
+		background: 'transparent',
+	},
+	'&:has(.Mui-disabled) .MuiSvgIcon-root': {
+		display: 'none',
 	},
 }));
 
@@ -75,6 +110,7 @@ export const Select: FC<SelectProps> = props => {
 		onChange = undefined,
 		value = multiple ? [] : null,
 		helperText = '',
+		disabled = false,
 		...rest
 	} = props;
 
@@ -114,6 +150,7 @@ export const Select: FC<SelectProps> = props => {
 					onChange(value ? value : null);
 				}
 			}
+
 			setOpenList(false);
 		},
 		[onChange, multiple]
@@ -139,7 +176,9 @@ export const Select: FC<SelectProps> = props => {
 			<Control fullWidth>
 				<Label shrink>{label}</Label>
 				<CustomSelect
+					disabled={disabled}
 					focus={focus}
+					error={error}
 					variant="filled"
 					label={label}
 					onFocus={() => setFocus(true)}
@@ -163,6 +202,7 @@ export const Select: FC<SelectProps> = props => {
 					{RenderItems}
 				</CustomSelect>
 			</Control>
+			<HelperText helperText={helperText} />
 		</Container>
 	);
 };
