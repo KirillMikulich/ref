@@ -3,8 +3,8 @@ import {
 	AutocompleteProps,
 	Box,
 	Checkbox,
+	Chip,
 	FormControlLabel,
-	Grid,
 	Popper,
 	TextField,
 	styled,
@@ -14,16 +14,9 @@ import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
 import HelperText from '../HelperText';
-import {
-	BLUE_400,
-	GREY_100,
-	GREY_200,
-	GREY_300,
-	GREY_500,
-	GREY_900,
-	RED_100,
-} from 'styles/constants';
+import { BLUE_400, GREY_100, GREY_200, GREY_500, GREY_900, RED_100 } from 'styles/constants';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface SearchableProps
 	extends DefaultSelectProps,
@@ -56,11 +49,17 @@ const getColor = (props: AutoCompleteCSSProperties): string => {
 const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props => ({
 	borderRadius: '8px',
 	background: getColor(props),
+	position: 'relative',
 	border: props.disabled ? `1px solid ${GREY_200}` : 'none',
 	'&:has(.Mui-focused)': {
 		background: props.error === 'true' ? RED_100 : GREY_200,
 	},
 	'& .MuiInputBase-root': {
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		columnGap: '8px',
+		rowGap: '4px',
 		'&:before': {
 			display: 'none',
 		},
@@ -69,12 +68,11 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 		},
 	},
 	'& .MuiInputLabel-root': {
-		left: '8.5px',
 		transform: 'none',
-		top: '8px',
+		padding: '8px',
+		position: 'relative',
 		color: `${GREY_500} !important`,
 		fontSize: '12px',
-
 		fontStyle: 'normal',
 		fontWeight: '300',
 		lineHeight: 'normal',
@@ -83,7 +81,6 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 		borderRadius: '8px',
 		padding: '0 8px 8px 8px',
 		alignItems: 'end',
-		minHeight: '52px',
 		background: 'transparent',
 		'&:hover': {
 			background: 'transparent',
@@ -97,6 +94,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			fontWeight: '400',
 			lineHeight: 'normal',
 			color: GREY_900,
+			transform: 'none',
 			'&::placeholder': {
 				color: GREY_900,
 				opacity: '1',
@@ -106,10 +104,14 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 				fontWeight: '400',
 				lineHeight: 'normal',
 			},
-		},
-		'& .Mui-disabled': {
-			WebkitTextFillColor: 'inherit',
-			background: 'transparent',
+			'& .Mui-disabled': {
+				WebkitTextFillColor: 'inherit',
+				background: 'transparent',
+			},
+			'&:has(.Mui-focused)': {
+				background: 'transparent',
+				transform: 'none',
+			},
 		},
 	},
 	'& .MuiAutocomplete-endAdornment': {
@@ -183,7 +185,7 @@ const ListItem = styled(Box)({
 	},
 });
 
-const CheckboxListItem = styled(FormControlLabel)<{ paddingLeft: string }>(props => ({
+const CheckboxListItem = styled(FormControlLabel)<{ left: string }>(props => ({
 	padding: '0px',
 	margin: '0px',
 	color: GREY_900,
@@ -199,9 +201,35 @@ const CheckboxListItem = styled(FormControlLabel)<{ paddingLeft: string }>(props
 		background: GREY_200,
 	},
 	'& .MuiButtonBase-root': {
-		padding: props.paddingLeft === 'true' ? '0px 0px 0px 28px !important' : '0px',
+		padding: props.left === 'true' ? '0px 0px 0px 28px !important' : '0px',
 	},
 }));
+
+const CustomChip = styled(Chip)({
+	padding: '8px',
+	margin: '0px',
+	background: 'white',
+	borderRadius: '8px',
+	color: GREY_900,
+	fontFamily: 'Inter',
+	fontSize: '12px',
+	fontStyle: 'normal',
+	fontWeight: '400',
+	lineHeight: 'normal',
+	'& .MuiChip-root': {
+		display: 'flex',
+		flexDirection: 'row',
+		margin: '0px',
+		padding: '0px',
+		gap: '4px',
+	},
+	'& .MuiChip-deleteIconMedium': {
+		margin: '0px',
+		background: 'transparent',
+		fill: GREY_900,
+		fontSize: '16px',
+	},
+});
 
 export const Searchable: FC<SearchableProps> = props => {
 	const {
@@ -360,15 +388,14 @@ export const Searchable: FC<SearchableProps> = props => {
 	const optionRenderer = (props: any, option: any, { selected }: any) => {
 		const isSelectAllOption = useSelectAll
 			? (isCompoundItem ? option?.[keyValue] : option) === selectAllText
-			: true;
+			: false;
 
 		if (multiple) {
 			if (isSelectAllOption) return SelectAllOption(option, props);
 
-			console.log(props);
 			return (
 				<CheckboxListItem
-					paddingLeft={useSelectAll.toString()}
+					left={useSelectAll.toString()}
 					key={isCompoundItem ? option?.[keyValue] : option}
 					label={isCompoundItem ? option?.[keyLabel] : option}
 					{...props}
@@ -397,8 +424,6 @@ export const Searchable: FC<SearchableProps> = props => {
 					onChange(items ?? []);
 				}
 			}
-			console.log(autocompleteRef);
-			autocompleteRef?.current?.blur();
 		}
 	}, [items, isCompoundItem, onChange, getValue, keyValue, autocompleteRef]);
 
@@ -406,7 +431,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		(option: any, props: any) => (
 			<CheckboxListItem
 				{...props}
-				paddingLeft={'false'}
+				left={'false'}
 				key={isCompoundItem ? option?.[keyValue] : option}
 				label={isCompoundItem ? option?.[keyLabel] : option}
 				onClick={selectAllHandler}
@@ -439,6 +464,15 @@ export const Searchable: FC<SearchableProps> = props => {
 				isOptionEqualToValue={isOptionEqualToValue}
 				renderInput={inputRenderer}
 				renderOption={optionRenderer}
+				renderTags={(value, getTagProps) =>
+					value.map((option: any, index: number) => (
+						<CustomChip
+							deleteIcon={<CloseIcon />}
+							label={`${isCompoundItem ? option?.[keyLabel] : option}`}
+							{...getTagProps({ index })}
+						/>
+					))
+				}
 			/>
 			<HelperText helperText={helperText} />
 		</Container>
