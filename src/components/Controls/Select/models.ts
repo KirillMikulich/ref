@@ -9,4 +9,6 @@ export interface DefaultSelectProps {
 	error?: boolean;
 	onChange?: (value: any) => void;
 	helperText?: string;
+	useSelectAll?: boolean;
+	selectAllText?: string;
 }

@@ -42,7 +42,7 @@ const Label = styled(InputLabel)({
 });
 
 interface SelectCSSProps {
-	focus: boolean;
+	focus: string;
 	error: boolean;
 	disabled: boolean;
 }
@@ -52,7 +52,7 @@ const getColor = (props: SelectCSSProps): string => {
 		return RED_100;
 	}
 
-	if (props.focus) {
+	if (props.focus === 'true') {
 		return GREY_200;
 	}
 
@@ -182,7 +182,7 @@ export const Select: FC<SelectProps> = props => {
 				<Label shrink>{label}</Label>
 				<CustomSelect
 					disabled={disabled}
-					focus={focus}
+					focus={focus.toString()}
 					error={error}
 					variant="filled"
 					label={label}

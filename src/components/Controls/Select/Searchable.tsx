@@ -2,16 +2,27 @@ import {
 	Autocomplete,
 	AutocompleteProps,
 	Box,
-	InputAdornment,
+	Checkbox,
+	FormControlLabel,
+	Grid,
+	Popper,
 	TextField,
 	styled,
 } from '@mui/material';
-import React, { useCallback, type FC, useMemo, useState } from 'react';
+import React, { useCallback, type FC, useMemo, useRef } from 'react';
 import InputError from '../InputError';
 import { isValueIsObject } from 'utils';
 import { DefaultSelectProps } from './models';
 import HelperText from '../HelperText';
-import { BLUE_400, GREY_100, GREY_200, GREY_500, GREY_900, RED_100 } from 'styles/constants';
+import {
+	BLUE_400,
+	GREY_100,
+	GREY_200,
+	GREY_300,
+	GREY_500,
+	GREY_900,
+	RED_100,
+} from 'styles/constants';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export interface SearchableProps
@@ -26,12 +37,12 @@ const Container = styled(Box)`
 `;
 
 interface AutoCompleteCSSProperties {
-	error: boolean;
+	error: string;
 	disabled: boolean;
 }
 
 const getColor = (props: AutoCompleteCSSProperties): string => {
-	if (props.error) {
+	if (props.error === 'true') {
 		return RED_100;
 	}
 
@@ -47,7 +58,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 	background: getColor(props),
 	border: props.disabled ? `1px solid ${GREY_200}` : 'none',
 	'&:has(.Mui-focused)': {
-		background: props.error ? RED_100 : GREY_200,
+		background: props.error === 'true' ? RED_100 : GREY_200,
 	},
 	'& .MuiInputBase-root': {
 		'&:before': {
@@ -97,7 +108,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			},
 		},
 		'& .Mui-disabled': {
-			'-webkit-text-fill-color': 'inherit',
+			WebkitTextFillColor: 'inherit',
 			background: 'transparent',
 		},
 	},
@@ -118,6 +129,80 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 
 const Field = styled(TextField)({});
 
+const CustomPopper = styled(Popper)({
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'start',
+	padding: '0px',
+	margin: '0px',
+	'& .MuiPaper-root': {
+		padding: '8px 8px 8px 16px',
+		background: GREY_100,
+		border: `1px solid ${GREY_200}`,
+		borderRadius: '0px 0px 8px 8px',
+	},
+	'& .MuiAutocomplete-listbox': {
+		margin: '0px',
+		padding: '0px',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'start',
+		gap: '8px',
+		'& .MuiFormControlLabel-root': {
+			padding: `8px`,
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'start',
+			alignItems: 'start',
+			gap: '8px',
+			'& .MuiButtonBase-root': {
+				padding: '0px',
+			},
+		},
+	},
+});
+
+const ListItem = styled(Box)({
+	padding: '8px',
+	margin: '0px',
+	color: GREY_900,
+	fontFamily: 'Inter',
+	fontSize: '12px',
+	fontStyle: 'normal',
+	fontWeight: '400',
+	lineHeight: 'normal',
+	width: 'auto',
+	transition: 'background 0.5s ease',
+	cursor: 'pointer',
+	display: 'flex',
+	flexDirection: 'row',
+	justifyContent: 'start',
+	alignItems: 'start',
+	'&:hover': {
+		background: GREY_200,
+	},
+});
+
+const CheckboxListItem = styled(FormControlLabel)<{ paddingLeft: string }>(props => ({
+	padding: '0px',
+	margin: '0px',
+	color: GREY_900,
+	fontFamily: 'Inter',
+	fontSize: '12px',
+	fontStyle: 'normal',
+	fontWeight: '400',
+	lineHeight: 'normal',
+	width: 'auto',
+	transition: 'background 0.5s ease',
+	cursor: 'pointer',
+	'&:hover': {
+		background: GREY_200,
+	},
+	'& .MuiButtonBase-root': {
+		padding: props.paddingLeft === 'true' ? '0px 0px 0px 28px !important' : '0px',
+	},
+}));
+
 export const Searchable: FC<SearchableProps> = props => {
 	const {
 		error = false,
@@ -129,23 +214,29 @@ export const Searchable: FC<SearchableProps> = props => {
 		keyValue = 'id',
 		label = '',
 		onChange = undefined,
-		useNullableItem = true,
 		disabled = false,
 		placeholder = 'Выберите значение',
 		noOptionsText = 'Ничего не найдено',
 		helperText = '',
+		useSelectAll = false,
+		selectAllText = 'Выбрать все',
 		...rest
 	} = props;
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
+	const autocompleteRef = useRef<any>(null);
+
 	const options = useMemo(() => {
 		if (!items) return [];
 
-		if (useNullableItem) {
-			return [undefined, ...items];
+		if (useSelectAll) {
+			return [
+				isCompoundItem ? { [keyLabel]: selectAllText, [keyValue]: selectAllText } : selectAllText,
+				...items,
+			];
 		}
 
 		return items;
-	}, [useNullableItem, items]);
+	}, [useSelectAll, items, isCompoundItem, keyLabel, keyValue, selectAllText]);
 
 	const onSelect = (_: any, newValue: any) => {
 		const updateValue = Array.isArray(newValue)
@@ -221,50 +312,133 @@ export const Searchable: FC<SearchableProps> = props => {
 		}
 	}, [value, options, multiple, keyValue]);
 
+	const inputRenderer = (params: any) => (
+		<Field
+			variant="filled"
+			placeholder={multiple && getValue?.length > 0 ? undefined : placeholder}
+			{...params}
+			InputLabelProps={{
+				shrink: true,
+			}}
+			label={label}
+		/>
+	);
+
+	const optionDisabled = useCallback(
+		(option: any) => (isValueIsObject(option) ? option?.[keyLabel] : option) === noOptionsText,
+		[keyLabel, noOptionsText]
+	);
+
+	const filteredOption = useCallback(
+		(options: any, { inputValue }: any) => {
+			if (!inputValue) return options;
+
+			const search = inputValue?.toLowerCase() ?? '';
+			const values = options.filter((item: any) =>
+				(isValueIsObject(item) ? item?.[keyLabel] : item)?.toLowerCase().includes(search)
+			);
+
+			if (values.length) {
+				if (useSelectAll) {
+					return [
+						isCompoundItem
+							? { [keyLabel]: selectAllText, [keyValue]: selectAllText }
+							: selectAllText,
+						...values,
+					];
+				}
+
+				return values;
+			}
+			return isCompoundItem
+				? [{ [keyLabel]: noOptionsText, [keyValue]: undefined }]
+				: [noOptionsText];
+		},
+		[keyLabel, noOptionsText, isCompoundItem, keyValue, selectAllText, useSelectAll]
+	);
+
+	const optionRenderer = (props: any, option: any, { selected }: any) => {
+		const isSelectAllOption = useSelectAll
+			? (isCompoundItem ? option?.[keyValue] : option) === selectAllText
+			: true;
+
+		if (multiple) {
+			if (isSelectAllOption) return SelectAllOption(option, props);
+
+			console.log(props);
+			return (
+				<CheckboxListItem
+					paddingLeft={useSelectAll.toString()}
+					key={isCompoundItem ? option?.[keyValue] : option}
+					label={isCompoundItem ? option?.[keyLabel] : option}
+					{...props}
+					control={
+						<Checkbox key={option.label} checked={selected} onChange={(e: any) => undefined} />
+					}
+				/>
+			);
+		}
+
+		return (
+			<ListItem key={isCompoundItem ? option?.[keyValue] : option}>
+				{isCompoundItem ? option?.[keyLabel] : option}
+			</ListItem>
+		);
+	};
+
+	const selectAllHandler = useCallback(() => {
+		if (onChange) {
+			if (items.length === getValue.length) {
+				onChange([]);
+			} else {
+				if (isCompoundItem) {
+					onChange(items.map((i: any) => i?.[keyValue]) ?? []);
+				} else {
+					onChange(items ?? []);
+				}
+			}
+			console.log(autocompleteRef);
+			autocompleteRef?.current?.blur();
+		}
+	}, [items, isCompoundItem, onChange, getValue, keyValue, autocompleteRef]);
+
+	const SelectAllOption = useCallback(
+		(option: any, props: any) => (
+			<CheckboxListItem
+				{...props}
+				paddingLeft={'false'}
+				key={isCompoundItem ? option?.[keyValue] : option}
+				label={isCompoundItem ? option?.[keyLabel] : option}
+				onClick={selectAllHandler}
+				control={<Checkbox key={option.label} checked={items.length === getValue.length} />}
+			/>
+		),
+		[keyLabel, keyValue, isCompoundItem, options, getValue]
+	);
+
 	return (
 		<Container>
 			{error && errorMessage && <InputError message={errorMessage} />}
 			<AutoCompleteCustom
 				{...rest}
+				ref={autocompleteRef}
 				value={getValue}
-				error={error}
+				error={error.toString()}
 				options={options}
 				fullWidth
-				disableClearable={true}
+				disableClearable={false}
 				multiple={multiple}
 				disabled={disabled}
-				filterOptions={(options: any, { inputValue }: any) => {
-					if (!inputValue) return options;
-
-					const search = inputValue?.toLowerCase() ?? '';
-					const values = options.filter((item: any) =>
-						(isValueIsObject(item) ? item?.[keyLabel] : item)?.toLowerCase().includes(search)
-					);
-
-					if (values.length) return values;
-					return isCompoundItem
-						? [{ [keyLabel]: noOptionsText, [keyValue]: undefined }]
-						: [noOptionsText];
-				}}
-				getOptionDisabled={(option: any) =>
-					(isValueIsObject(option) ? option?.[keyLabel] : option) === noOptionsText
-				}
+				PopperComponent={props => <CustomPopper {...props} />}
+				filterOptions={filteredOption}
+				getOptionDisabled={optionDisabled}
 				popupIcon={<ExpandMoreIcon fontSize="large" />}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
 				onChange={onSelect}
 				isOptionEqualToValue={isOptionEqualToValue}
-				renderInput={params => (
-					<Field
-						variant="filled"
-						placeholder={multiple && getValue?.length > 0 ? undefined : placeholder}
-						{...params}
-						InputLabelProps={{
-							shrink: true,
-						}}
-						label={label}
-					/>
-				)}
+				renderInput={inputRenderer}
+				renderOption={optionRenderer}
 			/>
 			<HelperText helperText={helperText} />
 		</Container>
