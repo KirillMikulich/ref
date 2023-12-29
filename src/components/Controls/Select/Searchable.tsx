@@ -119,12 +119,25 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			display: 'none',
 		},
 		'& .MuiIconButton-root': {
+			color: GREY_500,
 			padding: '0',
 			marginRight: '-5px',
 			marginTop: '-2px',
 			'&:hover': {
 				background: 'transparent',
 			},
+		},
+		'& .MuiAutocomplete-clearIndicator': {
+			opacity: '1',
+			overflow: 'visible',
+			visibility: 'visible',
+			width: '24px',
+			height: '24px',
+			color: GREY_500,
+			borderRadius: '50%',
+			background: 'white',
+			marginRight: '8px',
+			fontSize: '24px',
 		},
 	},
 }));
