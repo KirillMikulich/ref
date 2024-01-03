@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { CustomSelect } from './Select.component';
-import { StandardSelectProps } from 'components/Controls/Select';
+import { StandardSelectProps } from 'ui/Select';
 
 const meta: Meta<StandardSelectProps> = {
 	title: 'Select',

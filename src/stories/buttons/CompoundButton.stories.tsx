@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import CompoundButton from 'components/Controls/CompoundButton';
+import CompoundButton from 'ui/CompoundButton';
 
 const meta: Meta<typeof CompoundButton> = {
 	title: 'Button',

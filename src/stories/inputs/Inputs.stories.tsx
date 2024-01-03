@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import TextField, { TextFieldProps } from 'components/Controls/TextField';
+import TextField, { TextFieldProps } from 'ui/TextField';
 import React from 'react';
 
 const meta: Meta<TextFieldProps> = {

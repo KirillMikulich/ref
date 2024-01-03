@@ -1,4 +1,4 @@
-import Select, { StandardSelectProps } from 'components/Controls/Select';
+import Select, { StandardSelectProps } from 'ui/Select';
 import React, { useState, type FC } from 'react';
 
 export const CustomSelect: FC<StandardSelectProps> = props => {
