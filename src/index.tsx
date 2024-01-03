@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./components/Pages/App";
+import App from "./pages/App";
 import theme from "styles/material/theme";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 
