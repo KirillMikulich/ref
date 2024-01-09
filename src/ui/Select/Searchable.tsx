@@ -81,7 +81,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 		borderRadius: '8px',
 		padding: '0 8px 8px 8px',
 		alignItems: 'end',
-		background: 'transparent',
+		background: 'transparent !important',
 		'&:hover': {
 			background: 'transparent',
 		},
@@ -110,6 +110,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			},
 			'&:has(.Mui-focused)': {
 				background: 'transparent !important',
+				backgroundColor: 'transparent !important',
 				transform: 'none !important',
 			},
 		},
@@ -420,7 +421,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		}
 
 		return (
-			<ListItem key={isCompoundItem ? option?.[keyValue] : option}>
+			<ListItem key={isCompoundItem ? option?.[keyValue] : option} {...props}>
 				{isCompoundItem ? option?.[keyLabel] : option}
 			</ListItem>
 		);
@@ -438,7 +439,7 @@ export const Searchable: FC<SearchableProps> = props => {
 				}
 			}
 		}
-	}, [items, isCompoundItem, onChange, getValue, keyValue, autocompleteRef]);
+	}, [items, isCompoundItem, onChange, getValue, keyValue]);
 
 	const SelectAllOption = useCallback(
 		(option: any, props: any) => (
@@ -451,7 +452,7 @@ export const Searchable: FC<SearchableProps> = props => {
 				control={<Checkbox key={option.label} checked={items.length === getValue.length} />}
 			/>
 		),
-		[keyLabel, keyValue, isCompoundItem, options, getValue]
+		[keyLabel, keyValue, isCompoundItem, getValue, items, selectAllHandler]
 	);
 
 	return (
