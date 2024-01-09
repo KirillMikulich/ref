@@ -1,7 +1,12 @@
-import React, { type FC } from "react";
+import Login from 'pages/Login';
+import React, { type FC } from 'react';
 
 const App: FC = () => {
-  return <></>;
+	return (
+		<>
+			<Login />
+		</>
+	);
 };
 
 export default App;
