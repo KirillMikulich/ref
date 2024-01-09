@@ -109,8 +109,8 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 				background: 'transparent',
 			},
 			'&:has(.Mui-focused)': {
-				background: 'transparent',
-				transform: 'none',
+				background: 'transparent !important',
+				transform: 'none !important',
 			},
 		},
 	},
