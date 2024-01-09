@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { CustomSelect } from './Select.component';
-import { StandardSelectProps } from 'ui/Select';
+import { SelectProps } from 'ui/Select';
 
-const meta: Meta<StandardSelectProps> = {
+const meta: Meta<SelectProps> = {
 	title: 'Select',
 	component: CustomSelect,
 	argTypes: {
@@ -68,7 +68,7 @@ const meta: Meta<StandardSelectProps> = {
 
 export default meta;
 
-type Story = StoryObj<StandardSelectProps>;
+type Story = StoryObj<SelectProps>;
 
 export const Standard: Story = {
 	args: {
@@ -84,7 +84,7 @@ export const Standard: Story = {
 		multiple: false,
 		isSearchable: false,
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
 
 export const Simple: Story = {
@@ -95,7 +95,7 @@ export const Simple: Story = {
 		multiple: false,
 		isSearchable: false,
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
 
 export const HelperText: Story = {
@@ -107,7 +107,7 @@ export const HelperText: Story = {
 		isSearchable: false,
 		helperText: 'Help message',
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
 
 export const Error: Story = {
@@ -119,7 +119,7 @@ export const Error: Story = {
 		isSearchable: false,
 		error: true,
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
 
 export const ErrorMessage: Story = {
@@ -132,7 +132,7 @@ export const ErrorMessage: Story = {
 		error: true,
 		errorMessage: 'Error message',
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };
 
 export const DisabledReadonly: Story = {
@@ -144,110 +144,5 @@ export const DisabledReadonly: Story = {
 		isSearchable: false,
 		disabled: true,
 	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const StandardSearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: [
-			{ id: 1, name: 'NAME-1' },
-			{ id: 2, name: 'NAME-2' },
-			{ id: 3, name: 'NAME-3' },
-		],
-		placeholder: 'Выберите значение',
-		keyValue: 'id',
-		keyLabel: 'name',
-		multiple: false,
-		isSearchable: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const StandardSearchableMulti: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: [
-			{ id: 1, name: 'NAME-1' },
-			{ id: 2, name: 'NAME-2' },
-			{ id: 3, name: 'NAME-3' },
-		],
-		placeholder: 'Выберите значение',
-		keyValue: 'id',
-		keyLabel: 'name',
-		multiple: true,
-		useSelectAll: true,
-		isSearchable: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const SimpleSearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		multiple: false,
-		isSearchable: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const SimpleSearchableMulti: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		multiple: true,
-		isSearchable: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const HelperTextSearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		multiple: false,
-		isSearchable: true,
-		helperText: 'Help message',
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const ErrorSearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		multiple: false,
-		isSearchable: true,
-		error: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const ErrorMessageSearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		isSearchable: true,
-		error: true,
-		errorMessage: 'Error message',
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
-};
-
-export const DisabledReadonlySearchable: Story = {
-	args: {
-		label: 'Lorem ipsum',
-		items: ['1', '2', '3', '4'],
-		placeholder: 'Выберите значение',
-		multiple: false,
-		isSearchable: true,
-		disabled: true,
-	},
-	render: (args: StandardSelectProps) => <CustomSelect {...args} />,
+	render: (args: SelectProps) => <CustomSelect {...args} />,
 };

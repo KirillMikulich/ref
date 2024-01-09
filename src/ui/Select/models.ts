@@ -2,7 +2,6 @@ export interface DefaultSelectProps {
 	items?: any[];
 	label?: string;
 	placeholder?: string;
-	useNullableItem?: boolean;
 	keyLabel?: string;
 	keyValue?: string;
 	errorMessage?: string;
