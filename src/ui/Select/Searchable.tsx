@@ -69,7 +69,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 	},
 	'& .MuiInputLabel-root': {
 		transform: 'none',
-		padding: '8px',
+		padding: '8px 16px 4px 16px',
 		position: 'relative',
 		color: `${GREY_500} !important`,
 		fontSize: '12px',
@@ -79,7 +79,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 	},
 	'& .MuiFilledInput-root': {
 		borderRadius: '8px',
-		padding: '0 8px 8px 8px',
+		padding: '0 16px 8px 16px',
 		alignItems: 'end',
 		background: 'transparent !important',
 		'&:hover': {
@@ -116,6 +116,8 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 		},
 	},
 	'& .MuiAutocomplete-endAdornment': {
+		top: '50%',
+		transform: 'translateY(-80%)',
 		'&:has(.Mui-disabled)': {
 			display: 'none',
 		},
@@ -143,7 +145,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 	},
 }));
 
-const Field = styled(TextField)({});
+const Field = styled(TextField)({ cursor: 'default !important' });
 
 const CustomPopper = styled(Popper)({
 	display: 'flex',
@@ -169,7 +171,8 @@ const CustomPopper = styled(Popper)({
 			display: 'flex',
 			flexDirection: 'row',
 			justifyContent: 'start',
-			alignItems: 'start',
+			alignItems: 'center',
+			minHeight: '32px',
 			gap: '8px',
 			'& .MuiButtonBase-root': {
 				padding: '0px',
@@ -221,7 +224,7 @@ const CheckboxListItem = styled(FormControlLabel)<{ left: string }>(props => ({
 
 const CustomChip = styled(Chip)({
 	padding: '8px',
-	margin: '0px',
+	margin: '0px !important',
 	background: 'white',
 	borderRadius: '8px',
 	color: GREY_900,
@@ -363,6 +366,10 @@ export const Searchable: FC<SearchableProps> = props => {
 				shrink: true,
 			}}
 			label={label}
+			inputProps={{
+				...params.inputProps,
+				readOnly: true,
+			}}
 		/>
 	);
 

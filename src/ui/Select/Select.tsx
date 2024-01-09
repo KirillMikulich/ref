@@ -15,6 +15,7 @@ import { DefaultSelectProps } from './models';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { GREY_100, GREY_200, GREY_500, GREY_900, RED_100 } from 'styles/constants';
 import HelperText from '../HelperText';
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface SelectProps extends MuiSelectProps, DefaultSelectProps {
 	onChange?: (value: any) => void;
@@ -76,6 +77,7 @@ const CustomSelect = styled(MuiSelect)<SelectCSSProps>(props => ({
 		display: 'none',
 	},
 	'& .MuiInputBase-input': {
+		position: 'relative',
 		alignItems: 'end',
 		padding: '8px',
 		color: GREY_900,
@@ -93,13 +95,40 @@ const CustomSelect = styled(MuiSelect)<SelectCSSProps>(props => ({
 	},
 	'& .MuiSvgIcon-root': {
 		padding: '0',
-		marginRight: '-5px',
-		marginTop: '-2px',
+		marginRight: '0px',
+		marginTop: '0px',
+		position: 'relative',
+		//top: '50%',
+		//transform: 'translateY(-50%)',
 	},
 	'&:has(.Mui-disabled) .MuiSvgIcon-root': {
 		display: 'none',
 	},
 }));
+
+const CloseIconButton = styled(Box)({
+	height: '24px',
+	width: '24px',
+	borderRadius: '50%',
+	background: '#fff',
+	cursor: 'pointer',
+	svg: {
+		fill: GREY_500,
+		height: '24px',
+		width: '24px',
+	},
+});
+
+const Controls = styled(Box)({
+	position: 'absolute',
+	display: 'flex',
+	flexDirection: 'row',
+	gap: '8px',
+	alignItems: 'center',
+	top: '50%',
+	right: '0',
+	transform: 'translateY(-50%)',
+});
 
 export const Select: FC<SelectProps> = props => {
 	const {
@@ -107,7 +136,6 @@ export const Select: FC<SelectProps> = props => {
 		errorMessage = '',
 		items = [],
 		label = '',
-		useNullableItem = true,
 		placeholder = 'Выберите значение',
 		keyLabel = 'id',
 		keyValue = 'name',
@@ -127,13 +155,13 @@ export const Select: FC<SelectProps> = props => {
 		if (items?.length > 0) {
 			if (typeof items[0] === 'object') {
 				return items.map((item: any, index: number) => (
-					<MenuItem key={item?.[keyValue] || index} value={item?.[keyValue] ?? undefined}>
+					<MenuItem key={`key-${index}`} value={item?.[keyValue] ?? undefined}>
 						{item?.[keyLabel] ?? ''}
 					</MenuItem>
 				));
 			} else {
 				return items.map((item: any, index: number) => (
-					<MenuItem key={index} value={item ?? undefined}>
+					<MenuItem key={`key-${index}`} value={item ?? undefined}>
 						{item ?? ''}
 					</MenuItem>
 				));
@@ -157,9 +185,14 @@ export const Select: FC<SelectProps> = props => {
 			}
 
 			setOpenList(false);
+			setFocus(false);
 		},
 		[onChange, multiple]
 	);
+
+	const deleteAll = () => {
+		onChange && onChange(multiple ? [] : null);
+	};
 
 	const values = useMemo(() => {
 		if (isCompoundItem) {
@@ -193,6 +226,11 @@ export const Select: FC<SelectProps> = props => {
 					onClose={() => setOpenList(false)}
 					multiple={multiple}
 					{...rest}
+					endAdornment={
+						<CloseIconButton onClick={deleteAll}>
+							<CloseIcon />
+						</CloseIconButton>
+					}
 					IconComponent={props => <ExpandMoreIcon fontSize="large" {...props} />}
 					open={openList}
 					onOpen={() => setOpenList(true)}
@@ -201,9 +239,6 @@ export const Select: FC<SelectProps> = props => {
 					}
 					onChange={onSelect}
 				>
-					{useNullableItem && placeholder?.length > 0 && (
-						<MenuItem value={undefined}>{placeholder}</MenuItem>
-					)}
 					{RenderItems}
 				</CustomSelect>
 			</Control>
