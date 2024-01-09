@@ -375,28 +375,24 @@ export const Searchable: FC<SearchableProps> = props => {
 		(options: any, { inputValue }: any) => {
 			if (!inputValue) return options;
 
+			const filteredOptions = options.filter(
+				(item: any) => (isValueIsObject(item) ? item?.[keyLabel] : item) !== selectAllText
+			);
+
 			const search = inputValue?.toLowerCase() ?? '';
-			const values = options.filter((item: any) =>
+			const values = filteredOptions.filter((item: any) =>
 				(isValueIsObject(item) ? item?.[keyLabel] : item)?.toLowerCase().includes(search)
 			);
 
 			if (values.length) {
-				if (useSelectAll) {
-					return [
-						isCompoundItem
-							? { [keyLabel]: selectAllText, [keyValue]: selectAllText }
-							: selectAllText,
-						...values,
-					];
-				}
-
 				return values;
 			}
+
 			return isCompoundItem
 				? [{ [keyLabel]: noOptionsText, [keyValue]: undefined }]
 				: [noOptionsText];
 		},
-		[keyLabel, noOptionsText, isCompoundItem, keyValue, selectAllText, useSelectAll]
+		[keyLabel, noOptionsText, isCompoundItem, keyValue, selectAllText]
 	);
 
 	const optionRenderer = (props: any, option: any, { selected }: any) => {
