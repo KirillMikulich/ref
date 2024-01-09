@@ -22,6 +22,7 @@ export interface SearchableProps
 	extends DefaultSelectProps,
 		AutocompleteProps<any, any, any, any, any> {
 	onChange?: (value: any) => void;
+	isSearchable?: boolean;
 }
 
 const Container = styled(Box)`
@@ -265,6 +266,7 @@ export const Searchable: FC<SearchableProps> = props => {
 		helperText = '',
 		useSelectAll = false,
 		selectAllText = 'Выбрать все',
+		isSearchable = false,
 		...rest
 	} = props;
 	const isCompoundItem = useMemo(() => isValueIsObject(items?.[0]), [items]);
@@ -368,7 +370,7 @@ export const Searchable: FC<SearchableProps> = props => {
 			label={label}
 			inputProps={{
 				...params.inputProps,
-				readOnly: true,
+				readOnly: !isSearchable,
 			}}
 		/>
 	);
