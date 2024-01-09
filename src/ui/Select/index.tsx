@@ -84,7 +84,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 		padding: '0 16px 8px 16px',
 		alignItems: 'end',
 		background: 'transparent !important',
-		cursor: props.isSearchable ? 'text' : 'pointer',
+		cursor: props.disabled ? 'default' : props.isSearchable ? 'text' : 'pointer',
 		'&:hover': {
 			background: 'transparent',
 		},
@@ -98,7 +98,7 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			lineHeight: 'normal',
 			color: GREY_900,
 			transform: 'none',
-			cursor: props.isSearchable ? 'text' : 'pointer',
+			cursor: props.disabled ? 'default' : props.isSearchable ? 'text' : 'pointer',
 			'&::placeholder': {
 				color: GREY_900,
 				opacity: '1',
@@ -145,6 +145,10 @@ const AutoCompleteCustom = styled(Autocomplete)<AutoCompleteCSSProperties>(props
 			background: 'white',
 			marginRight: '8px',
 			fontSize: '24px',
+			svg: {
+				width: '24px',
+				height: '24px',
+			},
 		},
 	},
 }));
@@ -480,7 +484,7 @@ export const Select: FC<SelectProps> = props => {
 				PopperComponent={props => <CustomPopper {...props} />}
 				filterOptions={filteredOption}
 				getOptionDisabled={optionDisabled}
-				popupIcon={<ExpandMoreIcon fontSize="large" />}
+				popupIcon={<ExpandMoreIcon fontSize="large" fill={GREY_500} />}
 				getOptionLabel={getOptionLabel}
 				getOptionKey={getOptionKey}
 				onChange={onSelect}
